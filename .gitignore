@@ -1,0 +1,36 @@
+# Intellij
+idea/**/workspace.xml
+idea/**/tasks.xml
+idea/**/usage.statistics.xml
+idea/**/dictionaries
+dea/**/shelf
+.idea/
+out/
+*.iml
+*.iws
+ 
+# Maven
+log/
+target/
+/target/.idea
+/target/classes
+/target/generated-sources
+/target/maven-archiver
+/target/maven-status
+#Don't ignore jar
+!/target/my-application-*-standalone.jar
+
+# Ignore Mac system files
+.DS_store
+
+# Ignore node_modules folder
+node_modules
+
+# Ignore all text files
+*.txt
+
+# Ignore files related to API keys
+.env
+
+# Ignore SASS config files
+.sass-cache
