@@ -28,7 +28,7 @@ public class AliexpressHarvester implements MarketplaceHarvester {
 
 
     @Override
-    public List<MarketplaceDetection> parseAliexpress(String term, int numItems) throws HarvestException, InterruptedException {
+    public List<MarketplaceDetection> parseTarget(String term, int numItems) throws HarvestException, InterruptedException {
         ArrayList<MarketplaceDetection> detections = new ArrayList<>();
         WebDriver driver = getWebDriver();
 
@@ -56,9 +56,9 @@ public class AliexpressHarvester implements MarketplaceHarvester {
 
         getDescriptions(driver, jse, numItems);
         for (int i = 0; i < numItems; i++){
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-            LocalDateTime now = LocalDateTime.now();
-            detections.add(new MarketplaceDetectionItem(LocalDateTime.now(), Titles.get(i), Descriptions.get(i), Urls.get(i), Images.get(i),(i + 1), Sponsored.get(i), Prices.get(i)));
+            //DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            //LocalDateTime now = LocalDateTime.now();
+            detections.add(new MarketplaceDetectionItem(Titles.get(i), Descriptions.get(i), Urls.get(i), Images.get(i),(i + 1), Sponsored.get(i), Prices.get(i)));
             System.out.println("Detection #:" + (i + 1));
             System.out.println("Title: " + Titles.get(i));
             System.out.println("Url: " + Urls.get(i));
@@ -97,7 +97,7 @@ public class AliexpressHarvester implements MarketplaceHarvester {
             Prices.add(itemPrice.get(i).getText());
         }
         for (int i = 0; i < numItems; i++) {
-            detections.add(new MarketplaceDetectionItem(LocalDateTime.now(),Titles.get(i),"Description", "URL", "ImgURL",(i + 1), "Sponsored", Prices.get(i)));
+            detections.add(new MarketplaceDetectionItem(Titles.get(i),"Description", "URL", "ImgURL",(i + 1), "Sponsored", Prices.get(i)));
         }
             driver.close();
         driver.quit();
@@ -105,7 +105,7 @@ public class AliexpressHarvester implements MarketplaceHarvester {
     }
 
     private static WebDriver getWebDriver() {
-        System.setProperty("webdriver.chrome.driver","chromedriver"); //src/main/resources/chromedriver
+        System.setProperty("webdriver.chrome.driver","src/main/resources/chromedriver"); //src/main/resources/chromedriver
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless");
         options.addArguments("user-data-dir=/tmp/temp_profile");

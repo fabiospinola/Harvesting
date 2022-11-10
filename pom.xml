@@ -78,13 +78,8 @@
         <dependency>
             <groupId>com.mikemybytes</groupId>
             <artifactId>junit5-formatted-source</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.30</version>
         </dependency>
     </dependencies>
 

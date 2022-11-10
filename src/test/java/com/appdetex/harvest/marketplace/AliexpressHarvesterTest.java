@@ -17,7 +17,7 @@ class AliexpressHarvesterTest {
         AliexpressHarvester harvest = new AliexpressHarvester();
         List<MarketplaceDetection> detections = null;
         try {
-            detections = harvest.parseAliexpress("jacuzzi", numResults);
+            detections = harvest.parseTarget("jacuzzi", numResults);
             Assertions.assertNotNull(detections);
             Assertions.assertTrue(detections.size() == numResults, "Expecting " + (numResults+1));
         } catch (HarvestException | InterruptedException e) {
