@@ -9,21 +9,22 @@ import org.jsoup.nodes.Document;
 import java.io.IOException;
 import java.util.List;
 
-public abstract class AbstractHarvester implements MarketplaceHarvester {
+public abstract class AbstractHarvesterJsoup implements MarketplaceHarvester {
     private String baseurl;
+    private String userAgent = "appdetex";
 
-    public AbstractHarvester(String baseurl) {
+    public AbstractHarvesterJsoup(String baseurl) {
         this.baseurl = baseurl;
     }
 
     @Override
-    public List<MarketplaceDetection> parseTarget(String searchTerm, String userAgent, int numItems) throws HarvestException {
+    public List<MarketplaceDetection> parseTarget(String searchTerm, int numItems) throws HarvestException {
         int pageOrder = 0;
 
         try {
             Document doc = Jsoup.connect(baseurl).userAgent(userAgent).get();
             System.out.printf("Title: %s\n\n\n\n", doc.title());
-            return parseTarget(doc, userAgent, numItems);
+            return parseTarget(doc, numItems);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -31,6 +32,6 @@ public abstract class AbstractHarvester implements MarketplaceHarvester {
         }
     }
 
-    protected abstract List<MarketplaceDetection> parseTarget(Document doc, String userAgent, int numItems) throws HarvestException;
 
+    protected abstract List<MarketplaceDetection> parseTarget(Document doc, int numItems) throws HarvestException;
 }

@@ -2,8 +2,6 @@ package com.appdetex.harvest.marketplace;
 
 import com.appdetex.harvest.api.HarvestException;
 import com.appdetex.harvest.api.MarketplaceDetection;
-import com.appdetex.harvest.api.MarketplaceHarvester;
-import org.harvesting.Export;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,14 +15,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public abstract class AbstractAmazonHarvester extends AbstractHarvester {
+public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
+
+    private String userAgent = "appdetex";
 
     public AbstractAmazonHarvester(String baseUrl) {
 
         super(baseUrl);
     }
     @Override
-    protected List<MarketplaceDetection> parseTarget(Document doc, String userAgent, int numItems) throws HarvestException {
+    protected List<MarketplaceDetection> parseTarget(Document doc, int numItems) throws HarvestException {
         int pageOrder = 0;
 
         ArrayList<MarketplaceDetection> detections = new ArrayList<>();
@@ -62,14 +62,11 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvester {
 
     public void harvest(String searchTerm) throws IOException {
 
-        Export export = new Export();
         String url = getSearchUrl(searchTerm);
 
         System.out.println(url);
         System.out.println("Starting harvesting...(you should feel like a hacker)\n\n");
 
-        export.createCsv(null);
-        //System.out.println(entryList.stream());
     }
 
     public String getSearchUrl(String searchTerm) {
