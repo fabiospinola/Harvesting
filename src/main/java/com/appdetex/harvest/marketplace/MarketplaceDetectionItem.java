@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public class MarketplaceDetectionItem implements MarketplaceDetection {
 
-    private LocalDateTime capturedDate;
+    private LocalDateTime captureDate;
     private String title;
     private String description;
     private String url;
@@ -15,8 +15,8 @@ public class MarketplaceDetectionItem implements MarketplaceDetection {
     private String paid;
     private String price;
 
-    public MarketplaceDetectionItem(LocalDateTime capturedDate, String title, String description, String url, String imageUrl, Integer order, String paid, String price) {
-        this.capturedDate = capturedDate;
+    public MarketplaceDetectionItem(LocalDateTime captureDate, String title, String description, String url, String imageUrl, Integer order, String paid, String price) {
+        this.captureDate = captureDate;
         this.title = title;
         this.description = description;
         this.url = url;
@@ -26,41 +26,44 @@ public class MarketplaceDetectionItem implements MarketplaceDetection {
         this.price = price;
     }
 
+
+    @Override
+    public LocalDateTime getCapturedDate() {
+        return null;
+    }
+
     @Override
     public String getTitle() {
-        return title;
-    }
-
-    public LocalDateTime getCapturedDate() {
-        return capturedDate;
-    }
-
-    @Override
-    public Integer getOrder() {
-        return order;
-    }
-
-    @Override
-    public String getUrl() {
-        return url;
-    }
-
-    @Override
-    public String getImageUrl() {
-        return imageUrl;
+        return null;
     }
 
     @Override
     public String getDescription() {
-        return description;
+        return null;
     }
 
-    public String getPaid() {
-        return paid;
+    @Override
+    public String getUrl() {
+        return null;
+    }
+
+    @Override
+    public String getImageUrl() {
+        return null;
+    }
+
+    @Override
+    public Integer getOrder() {
+        return null;
+    }
+
+    @Override
+    public String isPaid() {
+        return null;
     }
 
     @Override
     public String getPrice() {
-        return price;
+        return null;
     }
 }

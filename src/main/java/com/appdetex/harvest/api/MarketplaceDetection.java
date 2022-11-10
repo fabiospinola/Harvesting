@@ -4,8 +4,9 @@ import java.time.LocalDateTime;
 
 public interface MarketplaceDetection {
 
-    String getTitle();
     LocalDateTime getCapturedDate();
+
+    String getTitle();
 
     String getDescription();
 
@@ -15,7 +16,8 @@ public interface MarketplaceDetection {
 
     Integer getOrder();
 
-    String getPaid();
+    String isPaid();
 
     String getPrice();
+
 }
