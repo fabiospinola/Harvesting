@@ -2,35 +2,36 @@ package com.appdetex.harvest.marketplace;
 
 import com.appdetex.harvest.api.MarketplaceDetection;
 
+import java.time.LocalDateTime;
+
 public class MarketplaceDetectionItem implements MarketplaceDetection {
 
-    private String capturedDate;
+    private LocalDateTime capturedDate;
     private String title;
-    private Integer order;
+    private String description;
     private String url;
     private String imageUrl;
-    private String description;
+    private Integer order;
+    private String paid;
     private String price;
-    private Boolean isPaid;
 
-    public MarketplaceDetectionItem(String capturedDate, Integer order, String title, String description, String url, String imageUrl, String price, Boolean isPaid) {
-        this.title = title;
+    public MarketplaceDetectionItem(LocalDateTime capturedDate, String title, String description, String url, String imageUrl, Integer order, String paid, String price) {
         this.capturedDate = capturedDate;
-        this.order = order;
+        this.title = title;
+        this.description = description;
         this.url = url;
         this.imageUrl = imageUrl;
-        this.description = description;
+        this.order = order;
+        this.paid = paid;
         this.price = price;
-        this.isPaid = isPaid;
     }
 
     @Override
-    public String getTitle(){
+    public String getTitle() {
         return title;
     }
 
-    @Override
-    public String getCapturedDate() {
+    public LocalDateTime getCapturedDate() {
         return capturedDate;
     }
 
@@ -54,13 +55,12 @@ public class MarketplaceDetectionItem implements MarketplaceDetection {
         return description;
     }
 
-    @Override
-    public String getPrice() {
-        return price;
+    public String getPaid() {
+        return paid;
     }
 
     @Override
-    public Boolean isPaid() {
-        return isPaid;
+    public String getPrice() {
+        return price;
     }
 }
