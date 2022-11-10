@@ -10,9 +10,15 @@ public class Main {
         //
         System.out.println("Leave me alone, I'm Scraping!!! (╯ ͠° ͟ʖ ͡°)╯┻━┻");
         AliexpressHarvester harvest = new AliexpressHarvester();
+        AmazonUsHarvester harvest1 = new AmazonUsHarvester();
+        AmazonUkHarvester harvest2 = new AmazonUkHarvester();
         List<MarketplaceDetection> detections = null;
+        List<MarketplaceDetection> detections1 = null;
+        List<MarketplaceDetection> detections2 = null;
         try {
             detections = harvest.parseTarget("jacuzzi", 10);
+            detections1 = harvest1.parseTarget("jacuzzi", 10);
+            detections2 = harvest1.parseTarget("jacuzzi", 10);
         } catch (HarvestException | InterruptedException e) {
             throw new RuntimeException(e);
         }

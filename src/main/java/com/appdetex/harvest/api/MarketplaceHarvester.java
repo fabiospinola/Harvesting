@@ -3,7 +3,7 @@ package com.appdetex.harvest.api;
 import java.io.IOException;
 import java.util.List;
 
-public interface MarketplaceHarvester {
+public interface MarketplaceHarvester{
 
     /**
      * Parse the marketplace target and return the number of items requested

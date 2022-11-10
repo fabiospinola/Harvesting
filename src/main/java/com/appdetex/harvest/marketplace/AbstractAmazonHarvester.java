@@ -35,7 +35,7 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
 
             pageOrder ++;
 
-            Boolean isPaidSearch = isPaidSearch(listing.get(i));
+            String isPaidSearch = isPaidSearch(listing.get(i));
 
             String listingTitle = ("\"" + listing.get(i).getElementsByClass("a-size-medium a-color-base a-text-normal").text() + "\"");
 
@@ -54,7 +54,8 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
             System.out.println("\t\tDescription: " + description);
             System.out.println("\n");
 
-            detections.add(new MarketplaceDetectionItem(getDate(), pageOrder, listingTitle, description, listingURL, imageUrl, listingPrice, isPaidSearch));
+            //MarketplaceDetectionItem( String title, String description, String url, String imageUrl, Integer order, String paid, String price)
+            detections.add(new MarketplaceDetectionItem(listingTitle, description, listingURL, imageUrl,pageOrder, isPaidSearch, listingPrice));
             //detections  = new Entry(listingTitle, description, listingPrice, imageUrl, listingURL, pageOrder, isPaidSearch);
         }
         return detections;
@@ -78,11 +79,11 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
         return url;
     }
 
-    public Boolean isPaidSearch(Element productEntry) {
-        Boolean isPaidSearch = false;
+    public String isPaidSearch(Element productEntry) {
+        String isPaidSearch = "false";
 
         if (productEntry.getElementsByClass("a-color-secondary").text().contains("Sponsored")) {
-            isPaidSearch = true;
+            isPaidSearch = "true";
         }
 
         return isPaidSearch;

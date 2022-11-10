@@ -33,7 +33,7 @@ abstract class AbstractAmazonHarvesterTest {
         List<MarketplaceDetection> detections = null;
         try {
             Document doc = getHtml(searchHtml);
-            detections = harvester.parseTarget(doc, "testing", numresults);
+            detections = harvester.parseTarget(doc, numresults);
             Assertions.assertNotNull(detections);
             Assertions.assertTrue(detections.size() ==numresults, "Expect " + numresults);
         } catch (HarvestException e) {
