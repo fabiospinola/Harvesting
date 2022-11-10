@@ -1,28 +1,19 @@
 package com.appdetex.harvest.marketplace;
 
-import com.appdetex.harvest.api.HarvestException;
-import com.appdetex.harvest.api.MarketplaceDetection;
 import com.appdetex.harvest.api.MarketplaceHarvester;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-
-public abstract class AbstractHarvester implements MarketplaceHarvester {
+public abstract class AbstractHarvesterHtmlUnit implements MarketplaceHarvester {
 
     private String baseUrl;
     WebClient client = new WebClient();
     HtmlPage page;
 
-    public AbstractHarvester(String baseUrl) {
+    public AbstractHarvesterHtmlUnit(String baseUrl) {
         this.baseUrl = baseUrl;
     }
-
+/*
     @Override
     public List<MarketplaceDetection> parseTarget(String term, int numItems) throws HarvestException {
         client.getOptions().setCssEnabled(false);
@@ -36,8 +27,9 @@ public abstract class AbstractHarvester implements MarketplaceHarvester {
             e.printStackTrace();
             throw new RuntimeException();
         }
-    }
+    }*/
 
+/*
     protected List<MarketplaceDetection> parseTargetInternalHtmlUnit(HtmlPage page, int numItems, WebClient client) throws HarvestException, IOException {
         ArrayList<MarketplaceDetection> detections = new ArrayList<>();
         List<HtmlElement> items = getElementsHtmlUnit(page);
@@ -47,9 +39,11 @@ public abstract class AbstractHarvester implements MarketplaceHarvester {
             detections.add(createDetectionHtmlUnit(src, ++index, client));
         }
         return detections;
-    }
+}*/
 
-    protected abstract List<HtmlElement> getElementsHtmlUnit(HtmlPage page);
+/*
+    protected abstract List<HtmlElement> getElementsHtmlUnit(HtmlPage page);*/
 
-    protected abstract MarketplaceDetection createDetectionHtmlUnit(HtmlElement src, int index, WebClient client) throws IOException;
+/*
+    protected abstract MarketplaceDetection createDetectionHtmlUnit(HtmlElement src, int index, WebClient client) throws IOException;*/
 }
