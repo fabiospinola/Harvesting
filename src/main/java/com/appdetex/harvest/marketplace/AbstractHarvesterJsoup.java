@@ -12,7 +12,7 @@ import java.util.List;
 public abstract class AbstractHarvesterJsoup implements MarketplaceHarvester {
     private String baseurl;
 
-    private String userAgent = "appdetex";
+    private String userAgent = "appdetex40";
 
     public AbstractHarvesterJsoup(String baseurl) {
         this.baseurl = baseurl;

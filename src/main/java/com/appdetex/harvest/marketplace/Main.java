@@ -85,7 +85,7 @@ public class Main {
     }
     public static void postADetection(List<MarketplaceDetection> detectionList) throws Exception {
 
-        HttpPost request = new HttpPost("http://localhost:8080/api/detection/create");  // "Detections" é um nome provisório para a Base de Dados
+        //HttpPost request = new HttpPost("http://localhost:8080/api/detection/create");  // "Detections" é um nome provisório para a Base de Dados
         /*
         for (MarketplaceDetection detection : detectionList) {
             Detections addDetections = new Detections(detection.getTitle(), detection.getDescription(), detection.getUrl(), detection.getImageUrl(), detection.getOrder(), detection.getPaid(), detection.getPrice());
@@ -95,17 +95,21 @@ public class Main {
         }*/
         int i =0;
         for (i = 0; i < detectionList.size(); i++) {
-            Detections addDetections = new Detections(detectionList.get(i).getTitle(), detectionList.get(i).getDescription(), detectionList.get(i).getUrl(), detectionList.get(i).getImageUrl(), detectionList.get(i).getOrder(), detectionList.get(i).getPaid(), detectionList.get(i).getPrice());
+            HttpPost request = new HttpPost("http://localhost:8080/api/detection/create");
+            Detections addDetections = new Detections(detectionList.get(i).getTitle(), detectionList.get(i).getDescription() , detectionList.get(i).getUrl(), detectionList.get(i).getImageUrl(), detectionList.get(i).getOrder(), detectionList.get(i).getPaid(), detectionList.get(i).getPrice());
             ObjectMapper mapper = new ObjectMapper();
             StringEntity json = new StringEntity(mapper.writeValueAsString(addDetections), ContentType.APPLICATION_JSON);
             request.setEntity(json);
-        }
+            Thread.sleep(1000);
+            CloseableHttpResponse response = httpClient.execute(request);
 
-
-        CloseableHttpResponse response = httpClient.execute(request);
-
-        if (response.getStatusLine().getStatusCode() != 200) {
-            System.out.println("No detections added! "+ response.getStatusLine().getStatusCode());
+            if (response.getStatusLine().getStatusCode() != 200) {
+                System.out.println("No detections added! "+ response.getStatusLine().getStatusCode());
+            }
+            else if (response.getStatusLine().getStatusCode() == 200) {
+                System.out.println("New detection added!");
+            }
+            response.close();
         }
     }
     @Autowired
@@ -134,10 +138,12 @@ public class Main {
         List<MarketplaceDetection> detections1 = null;
         List<MarketplaceDetection> detections2 = null;
         try {
-            //detections = harvest.parseTarget("jacuzzi", 10);
-            detections1 = harvest1.parseTarget("jacuzzi", 10);
-            //detections2 = harvest2.parseTarget("jacuzzi", 10);
+            detections = harvest.parseTarget("jacuzzi", 4);
+            detections1 = harvest1.parseTarget("jacuzzi", 4);
+            detections2 = harvest2.parseTarget("jacuzzi", 4);
+            postADetection(detections);
             postADetection(detections1);
+            postADetection(detections2);
         } catch (HarvestException | InterruptedException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
