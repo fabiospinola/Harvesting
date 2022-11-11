@@ -1,10 +1,6 @@
 package com.appdetex.harvest.api;
 
-import java.time.LocalDateTime;
-
 public interface MarketplaceDetection {
-
-    LocalDateTime getCapturedDate();
 
     String getTitle();
 
@@ -16,7 +12,7 @@ public interface MarketplaceDetection {
 
     Integer getOrder();
 
-    String isPaid();
+    String getPaid();
 
     String getPrice();
 

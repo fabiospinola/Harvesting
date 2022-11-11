@@ -80,10 +80,7 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
         String classValue = dynamic.getClassValue(spanSponsored);
         String sponsor = classValue == null ? "No paid search information available for item" : classValue;
 
-        LocalDateTime captureDate = LocalDateTime.now();
-
         System.out.println("\n" + index + "." +
-                "\nDate: " + captureDate +
                 "\nTitle: " + title +
                 "\nPrice: " + price +
                 "\nImage: " + imageUrl +
@@ -92,6 +89,6 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
                 "\nSponsored Class: " + sponsor +
                 "\n");
 
-        return new MarketplaceDetectionItem(captureDate, title, description, url, imageUrl, index, classValue, price);
+        return new MarketplaceDetectionItem(title, description, url, imageUrl, index, classValue, price);
     }
 }
