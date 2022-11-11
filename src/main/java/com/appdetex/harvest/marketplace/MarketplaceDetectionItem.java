@@ -12,7 +12,7 @@ public class MarketplaceDetectionItem implements MarketplaceDetection {
     private String paid;
     private String price;
 
-    public MarketplaceDetectionItem( String title, String description, String url, String imageUrl, Integer order, String paid, String price) {
+    public MarketplaceDetectionItem(String title, String description, String url, String imageUrl, Integer order, String paid, String price) {
         this.title = title;
         this.description = description;
         this.url = url;

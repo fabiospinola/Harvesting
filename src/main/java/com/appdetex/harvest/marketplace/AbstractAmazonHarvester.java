@@ -19,6 +19,7 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
 
     private String userAgent = "appdetex";
 
+
     public AbstractAmazonHarvester(String baseUrl) {
 
         super(baseUrl);
@@ -28,7 +29,8 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
         int pageOrder = 0;
 
         ArrayList<MarketplaceDetection> detections = new ArrayList<>();
-
+        String marketplace = doc.title();
+        String listingURL = null;
         Elements listing = doc.getElementsByClass("s-card-container s-overflow-hidden aok-relative puis-include-content-margin puis s-latency-cf-section s-card-border");
 
         for (int i = 0; i < numItems; i++) {
@@ -43,8 +45,12 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
 
             String imageUrl = listing.get(i).getElementsByClass("s-image").attr("src");
 
-            String listingURL = ("https://amazon.com" + listing.get(i).getElementsByClass("a-link-normal s-no-outline").attr("href"));
-
+            if (marketplace.equals("Amazon.co.uk : jacuzzi")) {
+                listingURL = ("https://www.amazon.co.uk" + listing.get(i).getElementsByClass("a-link-normal s-no-outline").attr("href"));
+            }
+            else {
+                listingURL = ("https://www.amazon.com" + listing.get(i).getElementsByClass("a-link-normal s-no-outline").attr("href"));
+            }
             String description = getDescription(listingURL, userAgent);
 
             System.out.println("#" + pageOrder + " - " + listingTitle + " - " + listingURL);
@@ -54,9 +60,8 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
             System.out.println("\t\tDescription: " + description);
             System.out.println("\n");
 
-            //MarketplaceDetectionItem( String title, String description, String url, String imageUrl, Integer order, String paid, String price)
             detections.add(new MarketplaceDetectionItem(listingTitle, description, listingURL, imageUrl,pageOrder, isPaidSearch, listingPrice));
-            //detections  = new Entry(listingTitle, description, listingPrice, imageUrl, listingURL, pageOrder, isPaidSearch);
+
         }
         return detections;
     }
@@ -85,7 +90,6 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
         if (productEntry.getElementsByClass("a-color-secondary").text().contains("Sponsored")) {
             isPaidSearch = "true";
         }
-
         return isPaidSearch;
     }
 

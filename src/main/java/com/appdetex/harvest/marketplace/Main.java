@@ -18,7 +18,7 @@ public class Main {
         try {
             detections = harvest.parseTarget("jacuzzi", 10);
             detections1 = harvest1.parseTarget("jacuzzi", 10);
-            detections2 = harvest1.parseTarget("jacuzzi", 10);
+            detections2 = harvest2.parseTarget("jacuzzi", 10);
         } catch (HarvestException | InterruptedException e) {
             throw new RuntimeException(e);
         }
