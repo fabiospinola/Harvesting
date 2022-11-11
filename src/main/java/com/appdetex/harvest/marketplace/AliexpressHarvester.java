@@ -47,15 +47,13 @@ public class AliexpressHarvester implements MarketplaceHarvester {
         for (int i = 0; i < numItems; i++) {
             Titles.add(itemTitle.get(i).getText());
             Prices.add(itemPrice.get(i).getText());
-            Sponsored.add(itemAd.get(i).getText().isEmpty() ? "FALSE" : "TRUE");
+            Sponsored.add(itemAd.get(i).getText().isEmpty() ? "false" : "true");
             Images.add(itemImgURL.get(i).getAttribute("src"));
             Urls.add(itemURL.get(i).getAttribute("href"));
         }
 
         getDescriptions(driver, jse, numItems);
         for (int i = 0; i < numItems; i++){
-            //DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-            //LocalDateTime now = LocalDateTime.now();
             detections.add(new MarketplaceDetectionItem(Titles.get(i), Descriptions.get(i), Urls.get(i), Images.get(i),(i + 1), Sponsored.get(i), Prices.get(i)));
             System.out.println("Detection #:" + (i + 1));
             System.out.println("Title: " + Titles.get(i));

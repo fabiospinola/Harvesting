@@ -32,75 +32,41 @@ public class Main {
 
     final static CloseableHttpClient httpClient = HttpClients.createDefault();
     public static void simpleGet() throws Exception{
-        HttpGet request = new HttpGet("http://localhost:8080/Detections");
+        HttpGet request = new HttpGet("http://localhost:8080/api/detection/getAll");
 
         CloseableHttpResponse response = httpClient.execute(request);
         HttpEntity entity = response.getEntity();
-        // System.out.println(EntityUtils.toString(entity));
+        System.out.println(EntityUtils.toString(entity));
 
         if (response.getStatusLine().getStatusCode() != 200) {
             System.out.println("Bad connection. " + response.getStatusLine().getStatusCode());
             return;
         }
 
-        ObjectMapper mapper = new ObjectMapper();
-
-        List<Detections> detectionsList = new ArrayList<Detections>();
-        int counter = 0;
-
-        detectionsList = mapper.readValue(EntityUtils.toString(entity), new TypeReference<List<Detections>>() {});
-        counter = detectionsList.size();
-
-        System.out.println(counter + " detections found! ");
-        for (Detections detections : detectionsList) {
-            System.out.println(detections.toString());
-        }
+        response.close();
     }
 
-    public static void parameterizedGet(int order) throws Exception {
-        String URL = String.format("http://localhost:8080/Detections?order=%d", order);
+    public static void parameterizedGet(int id) throws Exception {
+        String URL = String.format("http://localhost:8080/api/detection/id/%d", id);
         HttpGet request = new HttpGet(URL);
 
         CloseableHttpResponse response = httpClient.execute(request);
         HttpEntity entity = response.getEntity();
-        // System.out.println(EntityUtils.toString(entity));
+        System.out.println(EntityUtils.toString(entity));
 
         if (response.getStatusLine().getStatusCode() != 200) {
             System.out.println("Bad connection. " + response.getStatusLine().getStatusCode());
-            return;
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
-        List<Detections> detectionsList = new ArrayList<Detections>();
-        int counter = 0;
-
-        detectionsList = mapper.readValue(EntityUtils.toString(entity), new TypeReference<List<Detections>>() {});
-
-        counter = detectionsList.size();
-
-        System.out.println(counter + " detections found:");
-        for (Detections detections : detectionsList) {
-            System.out.println(detections.toString());
         }
     }
     public static void postADetection(List<MarketplaceDetection> detectionList) throws Exception {
 
-        //HttpPost request = new HttpPost("http://localhost:8080/api/detection/create");  // "Detections" é um nome provisório para a Base de Dados
-        /*
-        for (MarketplaceDetection detection : detectionList) {
-            Detections addDetections = new Detections(detection.getTitle(), detection.getDescription(), detection.getUrl(), detection.getImageUrl(), detection.getOrder(), detection.getPaid(), detection.getPrice());
-            ObjectMapper mapper = new ObjectMapper();
-            StringEntity json = new StringEntity(mapper.writeValueAsString(addDetections), ContentType.APPLICATION_JSON);
-            request.setEntity(json);
-        }*/
-        int i =0;
-        for (i = 0; i < detectionList.size(); i++) {
+        int counter;
+        for (counter = 0; counter < detectionList.size(); counter++) {
             HttpPost request = new HttpPost("http://localhost:8080/api/detection/create");
-            Detections addDetections = new Detections(detectionList.get(i).getTitle(), detectionList.get(i).getDescription() , detectionList.get(i).getUrl(), detectionList.get(i).getImageUrl(), detectionList.get(i).getOrder(), detectionList.get(i).getPaid(), detectionList.get(i).getPrice());
+            Detections addDetections = new Detections(detectionList.get(counter).getTitle(), detectionList.get(counter).getDescription() , detectionList.get(counter).getUrl(), detectionList.get(counter).getImageUrl(), detectionList.get(counter).getOrder(), detectionList.get(counter).getSponsored(), detectionList.get(counter).getPrice());
             ObjectMapper mapper = new ObjectMapper();
             StringEntity json = new StringEntity(mapper.writeValueAsString(addDetections), ContentType.APPLICATION_JSON);
             request.setEntity(json);
-            Thread.sleep(1000);
             CloseableHttpResponse response = httpClient.execute(request);
 
             if (response.getStatusLine().getStatusCode() != 200) {
@@ -123,14 +89,18 @@ public class Main {
 
     }
     @DeleteMapping("delete/{id}")
-    public String deleteStudent(@PathVariable("id") long id) {
+    public String deleteDetection(@PathVariable("id") long id) {
         return detectionService.deleteDetection(id);
 
     }
 
-    public static void main(String[] args) {
-        //
+    public static void main(String[] args) throws Exception {
+
         System.out.println("Leave me alone, I'm Scraping!!! (╯ ͠° ͟ʖ ͡°)╯┻━┻");
+        //parameterizedGet(25);
+        //simpleGet(); //Prints DB content in json (ugly) format
+
+
         AliexpressHarvester harvest = new AliexpressHarvester();
         AmazonUsHarvester harvest1 = new AmazonUsHarvester();
         AmazonUkHarvester harvest2 = new AmazonUkHarvester();
@@ -138,11 +108,11 @@ public class Main {
         List<MarketplaceDetection> detections1 = null;
         List<MarketplaceDetection> detections2 = null;
         try {
-            detections = harvest.parseTarget("jacuzzi", 4);
-            detections1 = harvest1.parseTarget("jacuzzi", 4);
-            detections2 = harvest2.parseTarget("jacuzzi", 4);
+            detections = harvest.parseTarget("jacuzzi", 10);
             postADetection(detections);
+            detections1 = harvest1.parseTarget("jacuzzi", 10);
             postADetection(detections1);
+            detections2 = harvest2.parseTarget("jacuzzi", 10);
             postADetection(detections2);
         } catch (HarvestException | InterruptedException e) {
             throw new RuntimeException(e);

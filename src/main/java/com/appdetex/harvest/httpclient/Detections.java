@@ -7,16 +7,16 @@ public class Detections {
     private String url;
     private String imageUrl;
     private Integer order;
-    private String paid;
+    private String sponsored;
     private String price;
 
-    public Detections(String title, String description, String url, String imageUrl, Integer order, String paid, String price) {
+    public Detections(String title, String description, String url, String imageUrl, Integer order, String sponsored, String price) {
         this.title = title;
         this.description = description;
         this.url = url;
         this.imageUrl = imageUrl;
         this.order = order;
-        this.paid = paid;
+        this.sponsored = sponsored;
         this.price = price;
     }
 
@@ -60,12 +60,12 @@ public class Detections {
         this.order = order;
     }
 
-    public String getPaid() {
-        return paid;
+    public String getSponsored() {
+        return sponsored;
     }
 
-    public void setPaid(String paid) {
-        this.paid = paid;
+    public void setSponsored(String sponsored) {
+        this.sponsored = sponsored;
     }
 
     public String getPrice() {
