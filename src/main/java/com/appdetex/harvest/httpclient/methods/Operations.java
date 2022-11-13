@@ -1,13 +1,11 @@
-package com.appdetex.harvest.marketplace;
+package com.appdetex.harvest.httpclient.methods;
 
+import com.appdetex.harvest.api.MarketplaceDetection;
 import com.appdetex.harvest.httpclient.Detections;
-import com.appdetex.harvest.httpclient.service.DetectionService;
 import com.appdetex.harvest.httpclient.entity.Detection;
 import com.appdetex.harvest.httpclient.request.UpdateDetectionRequest;
 import com.appdetex.harvest.httpclient.response.DetectionResponse;
-import com.appdetex.harvest.api.HarvestException;
-import com.appdetex.harvest.api.MarketplaceDetection;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.appdetex.harvest.httpclient.service.DetectionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -25,11 +23,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
-
+public class Operations {
     final static CloseableHttpClient httpClient = HttpClients.createDefault();
     public static void simpleGet() throws Exception{
         HttpGet request = new HttpGet("http://localhost:8080/api/detection/getAll");
@@ -92,33 +88,5 @@ public class Main {
     public String deleteDetection(@PathVariable("id") long id) {
         return detectionService.deleteDetection(id);
 
-    }
-
-    public static void main(String[] args) throws Exception {
-
-        System.out.println("Leave me alone, I'm Scraping!!! (╯ ͠° ͟ʖ ͡°)╯┻━┻");
-        //parameterizedGet(25);
-        //simpleGet(); //Prints DB content in json (ugly) format
-
-
-        AliexpressHarvester harvest = new AliexpressHarvester();
-        AmazonUsHarvester harvest1 = new AmazonUsHarvester();
-        AmazonUkHarvester harvest2 = new AmazonUkHarvester();
-        List<MarketplaceDetection> detections = null;
-        List<MarketplaceDetection> detections1 = null;
-        List<MarketplaceDetection> detections2 = null;
-        try {
-            detections = harvest.parseTarget("jacuzzi", 10);
-            postADetection(detections);
-            detections1 = harvest1.parseTarget("jacuzzi", 10);
-            postADetection(detections1);
-            detections2 = harvest2.parseTarget("jacuzzi", 10);
-            postADetection(detections2);
-        } catch (HarvestException | InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("Got your data? Now leave me to rest!!! ( ͠° ͟ʖ ͡°)");
     }
 }

@@ -44,7 +44,7 @@
                             <manifest>
                                 <addClasspath>true</addClasspath>
                                 <classpathPrefix>lib/</classpathPrefix>
-                                <mainClass>com.appdetex.harvest.marketplace.Main</mainClass>
+                                <mainClass>com.appdetex.harvest.main.Main</mainClass>
                             </manifest>
                         </archive>
                 </configuration>
