@@ -12,10 +12,10 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
 
@@ -46,10 +46,18 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
     protected List<MarketplaceDetection> parseTargetInternalHtmlUnit(HtmlPage page, int numItems, WebClient client) throws HarvestException, IOException {
         ArrayList<MarketplaceDetection> detections = new ArrayList<>();
         List<HtmlElement> items = getElementsHtmlUnit(page);
+        HashMap<String, Integer> sponsoredClassNames = new HashMap<>();
+
+        for (HtmlElement src : items) {
+            parseSponsoredClassNameFromListing(src, sponsoredClassNames);
+        }
+        System.out.println("HASMAP: " + sponsoredClassNames);
+
+        String sponsoredClassName = dynamic.countingClassTimes(sponsoredClassNames);
         int index = 0;
         for (HtmlElement src : items) {
             if (index == numItems) break;
-            detections.add(createDetectionHtmlUnit(src, ++index, client));
+            detections.add(createDetectionHtmlUnit(src, ++index, client, sponsoredClassName));
         }
         return detections;
     }
@@ -58,7 +66,14 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
         return page.getByXPath("//ul[@class='srp-results srp-list clearfix']//li[contains(@class, 's-item s-item__pl-on-bottom')]//div[@class='s-item__wrapper clearfix']");
     }
 
-    protected MarketplaceDetection createDetectionHtmlUnit(HtmlElement src, int index, WebClient client) throws IOException {
+    protected void parseSponsoredClassNameFromListing(HtmlElement src, HashMap<String, Integer> sponsoredClassNames) {
+        HtmlElement spanSponsored = src.getFirstByXPath(".//div[@class='s-item__details clearfix']//div[@class='s-item__detail s-item__detail--primary'][last()]//span//span");
+        String classValue = dynamic.getClassValue(spanSponsored);
+
+        EbayDynamicClass.assignValueAndKey(sponsoredClassNames, classValue);
+    }
+
+    protected MarketplaceDetection createDetectionHtmlUnit(HtmlElement src, int index, WebClient client, String sponsoredClassName) throws IOException {
 
         HtmlElement spanTitle = src.getFirstByXPath(".//div[@class='s-item__title']/span");
         String title = spanTitle == null ? "No title available for item" : ("\"" + spanTitle.asNormalizedText() + "\"");
@@ -76,9 +91,13 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
         HtmlElement spanDescription = itemPage.getFirstByXPath(".//div[@class='vim d-item-description']/iframe");
         String description = spanDescription == null ? "No description available for item for item" : ("\"" + spanDescription.asNormalizedText() + "\"");
 
-        HtmlElement spanSponsored = src.getFirstByXPath(".//div[@class='s-item__details clearfix']//div[last()]//span//span");
+        HtmlElement spanSponsored = src.getFirstByXPath(".//div[@class='s-item__details clearfix']//div[@class='s-item__detail s-item__detail--primary'][last()]//span//span");
+
         String classValue = dynamic.getClassValue(spanSponsored);
         String sponsor = classValue == null ? "No paid search information available for item" : classValue;
+
+        String paid = Objects.equals(sponsor, sponsoredClassName) ? "true" : "false";
+
 
         System.out.println("\n" + index + "." +
                 "\nTitle: " + title +
@@ -86,9 +105,10 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
                 "\nImage: " + imageUrl +
                 "\nUrl: " + url +
                 "\nDescription: " + description +
-                "\nSponsored Class: " + sponsor +
+                "\nSponsored Class: " + paid +
+                "\nclassValue: " + classValue +
                 "\n");
 
-        return new MarketplaceDetectionItem(title, description, url, imageUrl, index, classValue, price);
+        return new MarketplaceDetectionItem(title, description, url, imageUrl, index, paid, price);
     }
 }

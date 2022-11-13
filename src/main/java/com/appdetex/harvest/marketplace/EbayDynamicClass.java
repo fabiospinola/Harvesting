@@ -10,6 +10,7 @@ public class EbayDynamicClass {
         String classValue;
         String gettingToClassValue;
         String stringValueOfSpanSponsoredPath = String.valueOf(spanSponsored);
+        System.out.println("HTML XPATH: " + stringValueOfSpanSponsoredPath);
         String takeOutEmptyAndEqual = stringValueOfSpanSponsoredPath.replace(" ", "").replace("=", "");
 
         try {
@@ -21,11 +22,11 @@ public class EbayDynamicClass {
         return classValue;
     }
 
-    public void assignValueAndKey(String classValue, HashMap<String, Integer> hashMap) {
-        if (hashMap.containsKey(classValue)) {
-            hashMap.put(classValue, hashMap.get(classValue) + 1);
+    static void assignValueAndKey(HashMap<String, Integer> sponsoredClassNames, String classValue) {
+        if (sponsoredClassNames.containsKey(classValue)) {
+            sponsoredClassNames.put(classValue, sponsoredClassNames.get(classValue) + 1);
         } else {
-            hashMap.put(classValue, 1);
+            sponsoredClassNames.put(classValue, 1);
         }
     }
 
@@ -39,9 +40,7 @@ public class EbayDynamicClass {
                 smallestValue = entry.getValue();
             }
         }
-        System.out.println("\tThe smallest is: " + smallestKey + " with " + smallestValue + "\n\n");
+        System.out.println("\n\tThe smallest is: " + smallestKey + " with " + smallestValue + "\n\n");
         return smallestKey;
     }
-
-
 }
