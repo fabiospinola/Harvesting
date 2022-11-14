@@ -2,59 +2,57 @@ package com.appdetex.harvest.marketplace;
 
 import com.appdetex.harvest.api.MarketplaceDetection;
 
-import java.time.LocalDateTime;
-
 public class MarketplaceDetectionItem implements MarketplaceDetection {
     private String title;
     private String description;
     private String url;
     private String imageUrl;
     private Integer order;
-    private String paid;
+    private String sponsored;
     private String price;
 
-    public MarketplaceDetectionItem(String title, String description, String url, String imageUrl, Integer order, String paid, String price) {
+    public MarketplaceDetectionItem(String title, String description, String url, String imageUrl, Integer order, String sponsored, String price) {
         this.title = title;
         this.description = description;
         this.url = url;
         this.imageUrl = imageUrl;
         this.order = order;
-        this.paid = paid;
+        this.sponsored = sponsored;
         this.price = price;
     }
 
     @Override
     public String getTitle() {
-        return null;
+        return title;
     }
 
     @Override
     public Integer getOrder() {
-        return null;
+        return order;
     }
 
     @Override
     public String getUrl() {
-        return null;
+        return url;
     }
 
     @Override
     public String getImageUrl() {
-        return null;
+        return imageUrl;
     }
 
     @Override
     public String getDescription() {
-        return null;
+        return description;
     }
 
     @Override
-    public String getPaid() {
-        return null;
+    public String getSponsored() {
+        return sponsored;
     }
 
     @Override
     public String getPrice() {
-        return null;
+        return price;
     }
 }

@@ -12,7 +12,7 @@ public interface MarketplaceDetection {
 
     Integer getOrder();
 
-    String getPaid();
+    String getSponsored();
 
     String getPrice();
 
