@@ -8,7 +8,7 @@ import com.appdetex.harvest.marketplace.AmazonUsHarvester;
 
 import java.util.List;
 
-import static com.appdetex.harvest.httpclient.methods.Operations.postADetection;
+import static com.appdetex.harvest.httpclient.methods.Operations.*;
 
 public class Main {
 
@@ -17,8 +17,9 @@ public class Main {
         System.out.println("Leave me alone, I'm Scraping!!! (╯ ͠° ͟ʖ ͡°)╯┻━┻");
         //parameterizedGet(25);
         //simpleGet(); //Prints DB content in json (ugly) format
-
-
+        //parameterizedGet(122);
+        //deleteDetection(123);
+/*
         AliexpressHarvester harvest = new AliexpressHarvester();
         AmazonUsHarvester harvest1 = new AmazonUsHarvester();
         AmazonUkHarvester harvest2 = new AmazonUkHarvester();
@@ -36,7 +37,7 @@ public class Main {
             throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
+        }*/
         System.out.println("Got your data? Now leave me to rest!!! ( ͠° ͟ʖ ͡°)");
     }
 }
