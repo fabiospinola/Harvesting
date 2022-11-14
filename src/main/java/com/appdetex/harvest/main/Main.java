@@ -5,6 +5,8 @@ import com.appdetex.harvest.api.MarketplaceDetection;
 import com.appdetex.harvest.marketplace.Aliexpress.AliexpressHarvester;
 import com.appdetex.harvest.marketplace.Amazon.AmazonUkHarvester;
 import com.appdetex.harvest.marketplace.Amazon.AmazonUsHarvester;
+import com.appdetex.harvest.marketplace.Ebay.EbayUkHarvester;
+import com.appdetex.harvest.marketplace.Ebay.EbayUsHarvester;
 
 import java.util.List;
 
@@ -23,9 +25,13 @@ public class Main {
         AliexpressHarvester harvest = new AliexpressHarvester();
         AmazonUsHarvester harvest1 = new AmazonUsHarvester();
         AmazonUkHarvester harvest2 = new AmazonUkHarvester();
+        EbayUsHarvester harvest3 = new EbayUsHarvester();
+        EbayUkHarvester harvest4 = new EbayUkHarvester();
         List<MarketplaceDetection> detections = null;
         List<MarketplaceDetection> detections1 = null;
         List<MarketplaceDetection> detections2 = null;
+        List<MarketplaceDetection> detections3 = null;
+        List<MarketplaceDetection> detections4 = null;
         try {
             detections = harvest.parseTarget("jacuzzi", 3);
             postADetection(detections);
@@ -33,6 +39,10 @@ public class Main {
             postADetection(detections1);
             detections2 = harvest2.parseTarget("jacuzzi", 3);
             postADetection(detections2);
+            detections3 = harvest3.parseTarget("jacuzzi", 3);
+            postADetection(detections3);
+            detections4 = harvest4.parseTarget("jacuzzi", 3);
+            postADetection(detections4);
         } catch (HarvestException | InterruptedException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
