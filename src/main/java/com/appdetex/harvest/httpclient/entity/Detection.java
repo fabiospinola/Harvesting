@@ -1,10 +1,10 @@
 package com.appdetex.harvest.httpclient.entity;
 
 
+import com.appdetex.harvest.httpclient.request.CreateDetectionRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import com.appdetex.harvest.httpclient.request.CreateDetectionRequest;
 
 import javax.persistence.*;
 

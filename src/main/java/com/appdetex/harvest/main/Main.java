@@ -10,7 +10,7 @@ import com.appdetex.harvest.marketplace.Ebay.EbayUsHarvester;
 
 import java.util.List;
 
-import static com.appdetex.harvest.httpclient.methods.Operations.*;
+import static com.appdetex.harvest.httpclient.methods.Operations.postADetection;
 
 public class Main {
 
