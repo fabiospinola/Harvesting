@@ -10,6 +10,7 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
         <version>2.7.5</version>
+
     </parent>
     <build>
         <finalName>Webscraper_Aliexpress</finalName>
@@ -40,13 +41,13 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
-                        <archive>
-                            <manifest>
-                                <addClasspath>true</addClasspath>
-                                <classpathPrefix>lib/</classpathPrefix>
-                                <mainClass>com.appdetex.harvest.main.Main</mainClass>
-                            </manifest>
-                        </archive>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>com.appdetex.harvest.main.Main</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
                 <executions>
                     <execution>
@@ -171,10 +172,18 @@
             <artifactId>spring-boot-starter-validation</artifactId>
             <version>2.2.6.RELEASE</version>
         </dependency>
+<<<<<<< HEAD
         <dependency>
             <groupId>net.sourceforge.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
             <version>2.66.0</version>
+=======
+
+        <dependency>
+            <groupId>net.sourceforge.htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
+            <version>${htmlunit.version}</version>
+>>>>>>> c6cec55419cf65bdf4f698e42e210293981e77f3
         </dependency>
     </dependencies>
     <repositories>
@@ -219,6 +228,7 @@
         <maven.compiler.target>19</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jsoup.version>1.15.3</jsoup.version>
+        <htmlunit.version>2.66.0</htmlunit.version>
     </properties>
 
 </project>

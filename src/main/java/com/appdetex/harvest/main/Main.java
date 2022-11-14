@@ -25,6 +25,7 @@ public class Main {
         AliexpressHarvester harvest = new AliexpressHarvester();
         AmazonUsHarvester harvest1 = new AmazonUsHarvester();
         AmazonUkHarvester harvest2 = new AmazonUkHarvester();
+<<<<<<< HEAD
         EbayUsHarvester harvest3 = new EbayUsHarvester();
         EbayUkHarvester harvest4 = new EbayUkHarvester();
         List<MarketplaceDetection> detections = null;
@@ -44,6 +45,28 @@ public class Main {
             detections4 = harvest4.parseTarget("jacuzzi", 3);
             postADetection(detections4);
         } catch (HarvestException | InterruptedException e) {
+=======
+        EbayUsHarvester harvEbayUs = new EbayUsHarvester();
+        EbayUkHarvester harvEbayUk= new EbayUkHarvester();
+
+        List<MarketplaceDetection> detections = null;
+        List<MarketplaceDetection> detections1 = null;
+        List<MarketplaceDetection> detections2 = null;
+        List<MarketplaceDetection> detectionsEbayUs = null;
+        List<MarketplaceDetection> detectionsEbayUk = null;
+        try {
+            //detections = harvest.parseTarget("jacuzzi", 3);
+            //postADetection(detections);
+            //detections1 = harvest1.parseTarget("jacuzzi", 3);
+            //postADetection(detections1);
+            //detections2 = harvest2.parseTarget("jacuzzi", 3);
+            //postADetection(detections2);
+            detectionsEbayUs = harvEbayUs.parseTarget("Jacuzzi", 5);
+            postADetection(detectionsEbayUs);
+            detectionsEbayUk = harvEbayUk.parseTarget("Jacuzzi", 5);
+            postADetection(detectionsEbayUk);
+        } catch (HarvestException  e) {
+>>>>>>> c6cec55419cf65bdf4f698e42e210293981e77f3
             throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);

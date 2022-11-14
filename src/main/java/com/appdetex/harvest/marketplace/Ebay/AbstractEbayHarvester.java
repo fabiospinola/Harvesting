@@ -11,6 +11,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlImage;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import java.io.IOException;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -98,7 +99,7 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
 
         String paid = Objects.equals(sponsor, sponsoredClassName) ? "true" : "false";
 
-
+/*
         System.out.println("\n" + index + "." +
                 "\nTitle: " + title +
                 "\nPrice: " + price +
@@ -107,7 +108,7 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
                 "\nDescription: " + description +
                 "\nSponsored Class: " + paid +
                 "\nclassValue: " + classValue +
-                "\n");
+                "\n");*/
 
         return new MarketplaceDetectionItem(title, description, url, imageUrl, index, paid, price);
     }
