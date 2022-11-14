@@ -1,4 +1,4 @@
-package com.appdetex.harvest.marketplace;
+package com.appdetex.harvest.marketplace.Ebay;
 
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 
@@ -10,7 +10,7 @@ public class EbayDynamicClass {
         String classValue;
         String gettingToClassValue;
         String stringValueOfSpanSponsoredPath = String.valueOf(spanSponsored);
-        System.out.println("HTML XPATH: " + stringValueOfSpanSponsoredPath);
+        //System.out.println("HTML XPATH: " + stringValueOfSpanSponsoredPath);
         String takeOutEmptyAndEqual = stringValueOfSpanSponsoredPath.replace(" ", "").replace("=", "");
 
         try {
@@ -34,13 +34,13 @@ public class EbayDynamicClass {
         Integer smallestValue = 100;
         String smallestKey = null;
 
-        for (var entry : hashMap.entrySet()) {
+        for (java.util.Map.Entry<String, Integer> entry : hashMap.entrySet()) {
             if (entry.getValue() < smallestValue) {
                 smallestKey = entry.getKey();
                 smallestValue = entry.getValue();
             }
         }
-        System.out.println("\n\tThe smallest is: " + smallestKey + " with " + smallestValue + "\n\n");
+        //ystem.out.println("\n\tThe smallest is: " + smallestKey + " with " + smallestValue + "\n\n");
         return smallestKey;
     }
 }

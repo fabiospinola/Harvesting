@@ -1,4 +1,4 @@
-package com.appdetex.harvest.marketplace;
+package com.appdetex.harvest.marketplace.Ebay;
 
 import com.appdetex.harvest.api.HarvestException;
 import com.appdetex.harvest.api.MarketplaceDetection;
