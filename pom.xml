@@ -172,18 +172,10 @@
             <artifactId>spring-boot-starter-validation</artifactId>
             <version>2.2.6.RELEASE</version>
         </dependency>
-<<<<<<< HEAD
-        <dependency>
-            <groupId>net.sourceforge.htmlunit</groupId>
-            <artifactId>htmlunit</artifactId>
-            <version>2.66.0</version>
-=======
-
         <dependency>
             <groupId>net.sourceforge.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
             <version>${htmlunit.version}</version>
->>>>>>> c6cec55419cf65bdf4f698e42e210293981e77f3
         </dependency>
     </dependencies>
     <repositories>
