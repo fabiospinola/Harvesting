@@ -43,8 +43,6 @@ public class Main {
             postADetection(detections3);
             detections4 = harvest4.parseTarget("jacuzzi", 1);
             postADetection(detections4);
-        } catch (HarvestException  e) {
-            throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
