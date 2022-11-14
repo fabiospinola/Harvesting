@@ -1,6 +1,8 @@
+package com.appdetex.harvest.marketplace;
+
 import com.appdetex.harvest.api.HarvestException;
 import com.appdetex.harvest.api.MarketplaceDetection;
-import com.appdetex.harvest.marketplace.AbstractEbayHarvester;
+import com.appdetex.harvest.marketplace.Ebay.AbstractEbayHarvester;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.jupiter.api.Assertions;

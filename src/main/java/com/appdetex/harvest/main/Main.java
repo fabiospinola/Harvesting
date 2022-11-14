@@ -1,16 +1,16 @@
 package com.appdetex.harvest.main;
 
-import com.appdetex.harvest.api.HarvestException;
 import com.appdetex.harvest.api.MarketplaceDetection;
 import com.appdetex.harvest.marketplace.Aliexpress.AliexpressHarvester;
 import com.appdetex.harvest.marketplace.Amazon.AmazonUkHarvester;
 import com.appdetex.harvest.marketplace.Amazon.AmazonUsHarvester;
 import com.appdetex.harvest.marketplace.Ebay.EbayUkHarvester;
 import com.appdetex.harvest.marketplace.Ebay.EbayUsHarvester;
+import static com.appdetex.harvest.httpclient.methods.Operations.postADetection;
 
 import java.util.List;
 
-import static com.appdetex.harvest.httpclient.methods.Operations.postADetection;
+
 
 public class Main {
 
