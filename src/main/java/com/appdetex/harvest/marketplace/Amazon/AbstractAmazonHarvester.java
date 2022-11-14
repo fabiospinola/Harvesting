@@ -1,7 +1,8 @@
-package com.appdetex.harvest.marketplace;
+package com.appdetex.harvest.marketplace.Amazon;
 
 import com.appdetex.harvest.api.HarvestException;
 import com.appdetex.harvest.api.MarketplaceDetection;
+import com.appdetex.harvest.marketplace.MarketplaceDetectionItem;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -108,7 +109,7 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
         return getDescription(productPage);
     }
 
-    protected String getDescription (Document doc){
+    public String getDescription(Document doc){
         String description = null;
         //description =  doc.select("ul.a-unordered-list.a-vertical.a-spacing-mini").not("h1.a-size-base-plus.a-text-bold").text().replace(doc.select("li#replacementPartsFitmentBullet").text()+doc.select("li#replacementPartsFitmentBullet").attr("data-fitsmessage"),"");
         description = ("\"" + doc.getElementsByClass("a-section a-spacing-medium a-spacing-top-small").text().replace("About this item This fits your . Make sure this fits by entering your model number. ", "").replace("This fits your . Make sure this fits by entering your model number.", "").replace("  ", " ") + "\"");

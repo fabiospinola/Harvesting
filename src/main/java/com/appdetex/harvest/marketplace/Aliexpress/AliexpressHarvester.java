@@ -1,8 +1,9 @@
-package com.appdetex.harvest.marketplace;
+package com.appdetex.harvest.marketplace.Aliexpress;
 
 import com.appdetex.harvest.api.HarvestException;
 import com.appdetex.harvest.api.MarketplaceDetection;
 import com.appdetex.harvest.api.MarketplaceHarvester;
+import com.appdetex.harvest.marketplace.MarketplaceDetectionItem;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;

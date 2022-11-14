@@ -2,9 +2,9 @@ package com.appdetex.harvest.main;
 
 import com.appdetex.harvest.api.HarvestException;
 import com.appdetex.harvest.api.MarketplaceDetection;
-import com.appdetex.harvest.marketplace.AliexpressHarvester;
-import com.appdetex.harvest.marketplace.AmazonUkHarvester;
-import com.appdetex.harvest.marketplace.AmazonUsHarvester;
+import com.appdetex.harvest.marketplace.Aliexpress.AliexpressHarvester;
+import com.appdetex.harvest.marketplace.Amazon.AmazonUkHarvester;
+import com.appdetex.harvest.marketplace.Amazon.AmazonUsHarvester;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class Main {
         //simpleGet(); //Prints DB content in json (ugly) format
         //parameterizedGet(122);
         //deleteDetection(123);
-/*
+
         AliexpressHarvester harvest = new AliexpressHarvester();
         AmazonUsHarvester harvest1 = new AmazonUsHarvester();
         AmazonUkHarvester harvest2 = new AmazonUkHarvester();
@@ -37,7 +37,7 @@ public class Main {
             throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }*/
+        }
         System.out.println("Got your data? Now leave me to rest!!! ( ͠° ͟ʖ ͡°)");
     }
 }

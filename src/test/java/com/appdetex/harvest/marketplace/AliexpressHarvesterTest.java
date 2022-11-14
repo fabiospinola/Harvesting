@@ -2,6 +2,7 @@ package com.appdetex.harvest.marketplace;
 
 import com.appdetex.harvest.api.HarvestException;
 import com.appdetex.harvest.api.MarketplaceDetection;
+import com.appdetex.harvest.marketplace.Aliexpress.AliexpressHarvester;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

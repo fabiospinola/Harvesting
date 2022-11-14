@@ -2,10 +2,6 @@ package com.appdetex.harvest.httpclient.methods;
 
 import com.appdetex.harvest.api.MarketplaceDetection;
 import com.appdetex.harvest.httpclient.Detections;
-import com.appdetex.harvest.httpclient.entity.Detection;
-import com.appdetex.harvest.httpclient.request.UpdateDetectionRequest;
-import com.appdetex.harvest.httpclient.response.DetectionResponse;
-import com.appdetex.harvest.httpclient.service.DetectionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -17,14 +13,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 
 public class Operations {

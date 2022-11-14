@@ -1,4 +1,4 @@
-package com.appdetex.harvest.marketplace;
+package com.appdetex.harvest.marketplace.Amazon;
 
 public class AmazonUkHarvester extends AbstractAmazonHarvester{
 

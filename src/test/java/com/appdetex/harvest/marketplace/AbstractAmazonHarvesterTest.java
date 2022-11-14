@@ -2,6 +2,7 @@ package com.appdetex.harvest.marketplace;
 
 import com.appdetex.harvest.api.HarvestException;
 import com.appdetex.harvest.api.MarketplaceDetection;
+import com.appdetex.harvest.marketplace.Amazon.AbstractAmazonHarvester;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.Assertions;
@@ -29,11 +30,11 @@ abstract class AbstractAmazonHarvesterTest {
 
     @ParameterizedTest
     @ValueSource (ints = {0, 5, 10, 20})
-    void testParseTarget(int numresults) {
+    public void testParseTarget(int numresults) {
         List<MarketplaceDetection> detections = null;
         try {
             Document doc = getHtml(searchHtml);
-            detections = harvester.parseTarget(doc, numresults);
+            detections = harvester.parseTarget(String.valueOf(doc), numresults);
             Assertions.assertNotNull(detections);
             Assertions.assertTrue(detections.size() ==numresults, "Expect " + numresults);
         } catch (HarvestException e) {

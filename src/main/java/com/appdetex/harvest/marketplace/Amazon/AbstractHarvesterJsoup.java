@@ -1,4 +1,4 @@
-package com.appdetex.harvest.marketplace;
+package com.appdetex.harvest.marketplace.Amazon;
 
 import com.appdetex.harvest.api.HarvestException;
 import com.appdetex.harvest.api.MarketplaceDetection;
