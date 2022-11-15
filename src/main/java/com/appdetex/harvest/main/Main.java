@@ -6,11 +6,10 @@ import com.appdetex.harvest.marketplace.Amazon.AmazonUkHarvester;
 import com.appdetex.harvest.marketplace.Amazon.AmazonUsHarvester;
 import com.appdetex.harvest.marketplace.Ebay.EbayUkHarvester;
 import com.appdetex.harvest.marketplace.Ebay.EbayUsHarvester;
-import static com.appdetex.harvest.httpclient.methods.Operations.postADetection;
 
-import java.sql.SQLOutput;
 import java.util.List;
-import java.util.Scanner;
+
+import static com.appdetex.harvest.httpclient.methods.Operations.postADetection;
 
 
 public class Main {
@@ -34,7 +33,7 @@ public class Main {
         List<MarketplaceDetection> detections3 = null;
         List<MarketplaceDetection> detections4 = null;
         String searchTerm = "jacuzzi";
-        int numItems = 5;
+        int numItems = 2;
 
         try {
             detections = harvest.parseTarget(searchTerm, numItems);
