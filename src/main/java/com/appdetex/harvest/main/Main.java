@@ -8,8 +8,9 @@ import com.appdetex.harvest.marketplace.Ebay.EbayUkHarvester;
 import com.appdetex.harvest.marketplace.Ebay.EbayUsHarvester;
 import static com.appdetex.harvest.httpclient.methods.Operations.postADetection;
 
+import java.sql.SQLOutput;
 import java.util.List;
-
+import java.util.Scanner;
 
 
 public class Main {
@@ -32,16 +33,19 @@ public class Main {
         List<MarketplaceDetection> detections2 = null;
         List<MarketplaceDetection> detections3 = null;
         List<MarketplaceDetection> detections4 = null;
+        String searchTerm = "jacuzzi";
+        int numItems = 5;
+
         try {
-            detections = harvest.parseTarget("jacuzzi", 1);
+            detections = harvest.parseTarget(searchTerm, numItems);
             postADetection(detections);
-            detections1 = harvest1.parseTarget("jacuzzi", 1);
+            detections1 = harvest1.parseTarget(searchTerm, numItems);
             postADetection(detections1);
-            detections2 = harvest2.parseTarget("jacuzzi", 1);
+            detections2 = harvest2.parseTarget(searchTerm, numItems);
             postADetection(detections2);
-            detections3 = harvest3.parseTarget("jacuzzi", 1);
+            detections3 = harvest3.parseTarget(searchTerm, numItems);
             postADetection(detections3);
-            detections4 = harvest4.parseTarget("jacuzzi", 1);
+            detections4 = harvest4.parseTarget(searchTerm, numItems);
             postADetection(detections4);
         } catch (Exception e) {
             throw new RuntimeException(e);

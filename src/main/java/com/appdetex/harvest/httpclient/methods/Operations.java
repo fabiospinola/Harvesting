@@ -30,7 +30,6 @@ public class Operations {
             System.out.println("Bad connection. " + response.getStatusLine().getStatusCode());
             return;
         }
-
         response.close();
     }
 

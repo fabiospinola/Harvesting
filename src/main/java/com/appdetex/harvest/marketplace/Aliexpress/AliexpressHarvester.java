@@ -37,13 +37,13 @@ public class AliexpressHarvester implements MarketplaceHarvester {
         driver.manage().window().maximize();
         Thread.sleep(2000);
         JavascriptExecutor jse = getJavascriptExecutor((JavascriptExecutor) driver); //script to do some scrolling on the page
-
+        getJavascriptExecutor(jse);
         WebElement pageContent = driver.findElement(By.cssSelector(".JIIxO"));                  //find the products container
-        List<WebElement> itemTitle = pageContent.findElements(By.cssSelector("._18_85")); //find and list the all the Titles in the products container
-        List<WebElement> itemPrice = pageContent.findElements(By.cssSelector(".mGXnE._37W_B")); //find and list the all the Prices in the products container
-        List<WebElement> itemImgURL = pageContent.findElements(By.cssSelector("._1RtJV.product-img"));      //find and list the all the Image's URLs in the products container
-        List<WebElement> itemURL = pageContent.findElements(By.cssSelector("._3t7zg._2f4Ho"));  //find and list the all the Items URLs in the products container
-        List<WebElement> itemAd = pageContent.findElements(By.cssSelector("._3A0hz.gYJvK"));    //find and list the all the Sponsored marks in the products container
+        List<WebElement> itemTitle = pageContent.findElements(By.cssSelector("._3y9Q1")); //find and list the all the Titles in the products container
+        List<WebElement> itemPrice = pageContent.findElements(By.cssSelector("._3gurs._37W_B")); //find and list the all the Prices in the products container
+        List<WebElement> itemImgURL = pageContent.findElements(By.cssSelector("._2ek7H.product-img"));      //find and list the all the Image's URLs in the products container
+        List<WebElement> itemURL = pageContent.findElements(By.cssSelector("._31q8B._2f4Ho"));  //find and list the all the Items URLs in the products container
+        List<WebElement> itemAd = pageContent.findElements(By.cssSelector(".grECZ.gYJvK"));    //find and list the all the Sponsored marks in the products container
 
         for (int i = 0; i < numItems; i++) {
             Titles.add(itemTitle.get(i).getText());
@@ -112,7 +112,6 @@ public class AliexpressHarvester implements MarketplaceHarvester {
         options.addArguments("--disable-gpu"); // applicable to windows os only
         options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
         options.addArguments("--no-sandbox"); // Bypass OS security model
-        options.addArguments("--headless");
         return new ChromeDriver(options);
     }
 
