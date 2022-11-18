@@ -42,7 +42,7 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
 
             String listingTitle = ("\"" + listing.get(i).getElementsByClass("a-size-medium a-color-base a-text-normal").text() + "\"");
 
-            String listingPrice = (listing.get(i).getElementsByClass("a-price-whole").text() + listing.get(i).getElementsByClass("a-price-fraction").text());
+            String listingPrice = (listing.get(i).getElementsByClass("a-price-whole").text() + listing.get(i).getElementsByClass("a-price-fraction").text() +  listing.get(i).getElementsByClass("a-price-symbol").text());
 
             String imageUrl = listing.get(i).getElementsByClass("s-image").attr("src");
 
@@ -57,7 +57,7 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
             System.out.println("#" + pageOrder + " - " + listingTitle + " - " + listingURL);
             System.out.println("\t\t" + imageUrl);
             System.out.println("\t\tSponsored: " + isPaidSearch);
-            System.out.println("\t\tPrice: " + listingPrice + "$");
+            System.out.println("\t\tPrice: " + listingPrice);
             System.out.println("\t\tDescription: " + description);
             System.out.println("\n");
 

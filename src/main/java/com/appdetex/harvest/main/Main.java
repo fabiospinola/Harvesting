@@ -33,16 +33,16 @@ public class Main {
         List<MarketplaceDetection> detections3 = null;
         List<MarketplaceDetection> detections4 = null;
         try {
-            detections = harvest.parseTarget("jacuzzi", 1);
-            postADetection(detections);
-            detections1 = harvest1.parseTarget("jacuzzi", 1);
+            //detections = harvest.parseTarget("jacuzzi", 1);
+            //postADetection(detections);
+            detections1 = harvest1.parseTarget("jacuzzi", 2);
             postADetection(detections1);
-            detections2 = harvest2.parseTarget("jacuzzi", 1);
+            detections2 = harvest2.parseTarget("jacuzzi", 2);
             postADetection(detections2);
-            detections3 = harvest3.parseTarget("jacuzzi", 1);
-            postADetection(detections3);
-            detections4 = harvest4.parseTarget("jacuzzi", 1);
-            postADetection(detections4);
+            //detections3 = harvest3.parseTarget("jacuzzi", 1);
+            //postADetection(detections3);
+            //detections4 = harvest4.parseTarget("jacuzzi", 1);
+            //postADetection(detections4);
         } catch (HarvestException  e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
