@@ -24,11 +24,9 @@ create table audit(
   state enum ('open', 'close'),
   status enum ('new', 'benign', 'enforce'),
   reason_code enum ('brand misuse', 'trademark infringement', 'phishing', 'fair-use'),
+  analyst varchar(50),
   foreign key (detection_id) references detection(id)
 );
-
-ALTER TABLE audit
-ADD COLUMN altered_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP after detection_id;
 
 create trigger audit_change after insert on detection
 	for each row
