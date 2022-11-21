@@ -4,15 +4,14 @@ import com.appdetex.harvest.api.HarvestException;
 import com.appdetex.harvest.api.MarketplaceDetection;
 import com.appdetex.harvest.api.MarketplaceHarvester;
 import com.appdetex.harvest.marketplace.MarketplaceDetectionItem;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,23 +31,34 @@ public class AliexpressHarvester implements MarketplaceHarvester {
         WebDriver driver = getWebDriver();
 
         String URL = "https://pt.aliexpress.com/wholesale?trafficChannel=main&d=y&CatId=0&SearchText=" + term + "&ltype=wholesale&SortType=default&g=y";
+        String URL1 = "https://www.amazon.es/s?k=" + term + "&crid=CJAAN7Z5HMS2&sprefix=" + term + "%2Caps%2C117&ref=nb_sb_noss_1";
         //https://pt.aliexpress.com/wholesale?trafficChannel=main&d=y&CatId=0&SearchText=jacuzzi&ltype=wholesale&SortType=default&g=y
         driver.get(URL);
         driver.manage().window().maximize();
-        Thread.sleep(2000);
+        //
+        //getJavascriptExecutor(jse);
         JavascriptExecutor jse = getJavascriptExecutor((JavascriptExecutor) driver); //script to do some scrolling on the page
+        //WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
+        Thread.sleep(2000);
         getJavascriptExecutor(jse);
-        WebElement pageContent = driver.findElement(By.cssSelector(".JIIxO"));                  //find the products container
-        List<WebElement> itemTitle = pageContent.findElements(By.cssSelector("._3y9Q1")); //find and list the all the Titles in the products container
-        List<WebElement> itemPrice = pageContent.findElements(By.cssSelector("._3gurs._37W_B")); //find and list the all the Prices in the products container
-        List<WebElement> itemImgURL = pageContent.findElements(By.cssSelector("._2ek7H.product-img"));      //find and list the all the Image's URLs in the products container
-        List<WebElement> itemURL = pageContent.findElements(By.cssSelector("._31q8B._2f4Ho"));  //find and list the all the Items URLs in the products container
-        List<WebElement> itemAd = pageContent.findElements(By.cssSelector(".grECZ.gYJvK"));    //find and list the all the Sponsored marks in the products container
+
+        WebElement pageContent = driver.findElement(By.cssSelector(".JIIx0"));//  /html/body/div[5]/div/div/div[2]/div/div[2]    /html/body/div[4]/div/div/div[2]/div[2]/div/div[2]
+        getJavascriptExecutor(jse);
+        getJavascriptExecutor(jse);
+        getJavascriptExecutor(jse);
+        getJavascriptExecutor(jse);
+        getJavascriptExecutor(jse);
+        List<WebElement> itemTitle = pageContent.findElements(By.xpath("a/div[2]/div[3]/h1")); //find and list the all the Titles in the products container
+        List<WebElement> itemPrice = pageContent.findElements(By.xpath("a/div[2]/div[1]/div[1]")); //find and list the all the Prices in the products container
+        List<WebElement> itemImgURL = pageContent.findElements(By.xpath("a/div[1]/img[@src]"));      //find and list the all the Image's URLs in the products container
+        List<WebElement> itemURL = pageContent.findElements(By.xpath("a[@href]"));  //find and list the all the Items URLs in the products container
+
+        //List<WebElement> itemAd = (List<WebElement>) isSponsored(driver, pageContent);    //find and list the all the Sponsored marks in the products container
 
         for (int i = 0; i < numItems; i++) {
             Titles.add(itemTitle.get(i).getText());
             Prices.add(itemPrice.get(i).getText());
-            Sponsored.add(itemAd.get(i).getText().isEmpty() ? "false" : "true");
+            Sponsored.add(isSponsored(driver, pageContent));
             Images.add(itemImgURL.get(i).getAttribute("src"));
             Urls.add(itemURL.get(i).getAttribute("href"));
         }
@@ -104,14 +114,14 @@ public class AliexpressHarvester implements MarketplaceHarvester {
     private static WebDriver getWebDriver() {
         System.setProperty("webdriver.chrome.driver","src/main/resources/chromedriver"); //src/main/resources/chromedriver
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
-        options.addArguments("user-data-dir=/tmp/temp_profile");
-        options.addArguments("start-maximized"); // open Browser in maximized mode
-        options.addArguments("disable-infobars"); // disabling infobars
-        options.addArguments("--disable-extensions"); // disabling extensions
-        options.addArguments("--disable-gpu"); // applicable to windows os only
-        options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
-        options.addArguments("--no-sandbox"); // Bypass OS security model
+        //options.addArguments("--headless","--window-size=1920,1200");
+        //options.addArguments("user-data-dir=/tmp/temp_profile");
+        //options.addArguments("start-maximized"); // open Browser in maximized mode
+        //options.addArguments("disable-infobars"); // disabling infobars
+        //options.addArguments("--disable-extensions"); // disabling extensions
+        //options.addArguments("--disable-gpu"); // applicable to windows os only
+        //options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+        //options.addArguments("--no-sandbox"); // Bypass OS security model
         return new ChromeDriver(options);
     }
 
@@ -121,20 +131,29 @@ public class AliexpressHarvester implements MarketplaceHarvester {
             jse.executeScript("scrollBy(0,500)");
             jse.executeScript("scrollBy(0,500)");
             Thread.sleep(2000);
-            Descriptions.add(driver.findElement(By.cssSelector(".product-overview")).getText().isEmpty() ? "\"Description not available\"" : "\"" + driver.findElement(By.cssSelector(".product-overview")).getText().replace("<br>" , " ").replace("::marker" , " ").replace("\"", " ") + "\"");
+            Descriptions.add(driver.findElement(By.cssSelector(".product-description")).getText().isEmpty() ? "\"Description not available\"" : "\"" + driver.findElement(By.xpath("//*[@id=\"product-detail\"]/div[2]/div/div[2]/div[1]/div")).getText().replace("<br>" , " ").replace("::marker" , " ").replace("\"", " ") + "\"");
+        }
+    }
+
+    private static String isSponsored(WebDriver driver, WebElement pageContent){
+        try {
+            pageContent.findElements(By.xpath("a/div[1]/span"));
+            return "true";
+        } catch (NoSuchElementException e) {
+            return "false";
         }
     }
 
     private static JavascriptExecutor getJavascriptExecutor(JavascriptExecutor driver) {
+        driver.executeScript("scrollBy(0,100)");
+        /*driver.executeScript("scrollBy(0,500)");
         driver.executeScript("scrollBy(0,500)");
         driver.executeScript("scrollBy(0,500)");
         driver.executeScript("scrollBy(0,500)");
         driver.executeScript("scrollBy(0,500)");
         driver.executeScript("scrollBy(0,500)");
         driver.executeScript("scrollBy(0,500)");
-        driver.executeScript("scrollBy(0,500)");
-        driver.executeScript("scrollBy(0,500)");
-        driver.executeScript("scrollBy(0,500)");
+        driver.executeScript("scrollBy(0,500)");*/
         return driver;
     }
 }
