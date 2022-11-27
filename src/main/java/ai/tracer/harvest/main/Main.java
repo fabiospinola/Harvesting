@@ -31,7 +31,7 @@ public class Main {
         List<MarketplaceDetection> detectionsEUS = null;
         List<MarketplaceDetection> detectionsEUK = null;
         String searchTerm = "jacuzzi";
-        int numItems = 5;
+        int numItems = 2;
 
         try {
             detectionsAES = harvestAES.parseTarget(searchTerm, numItems);
