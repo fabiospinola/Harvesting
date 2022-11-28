@@ -112,7 +112,7 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
 
     public String getDescription(Document doc){
         String description = null;
-        description = ("\"" + doc.getElementsByClass("a-section a-spacing-medium a-spacing-top-small").text().replace("About this item", " ").replace("About this item This fits your . Make sure this fits by entering your model number. ", "").replace("This fits your . Make sure this fits by entering your model number.", "").replace("  ", " ") + "\"");
+        description = ("\"" + doc.getElementsByClass("a-section a-spacing-medium a-spacing-top-small").text().replace("About this item", " ").replace("About this item This fits your . Make sure this fits by entering your model number. ", "").replace("This fits your . Make sure this fits by entering your model number.", "").replace("  ", " ").replace("℉","ºF").replace("℃","ºC") + "\"");
 
         return description;
     }

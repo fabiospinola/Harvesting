@@ -19,7 +19,7 @@ public class Operations {
 
         int counter;
         for (counter = 0; counter < detectionList.size(); counter++) {
-            HttpPost request = new HttpPost("http://localhost:8080/api/detection/create");
+            HttpPost request = new HttpPost("http://localhost:8080/api/createDetection");
             Detections addDetections = new Detections(detectionList.get(counter).getTitle(), detectionList.get(counter).getDescription(), detectionList.get(counter).getUrl(), detectionList.get(counter).getImageUrl(), detectionList.get(counter).getOrder(), detectionList.get(counter).getSponsored(), detectionList.get(counter).getPrice());
             ObjectMapper mapper = new ObjectMapper();
             StringEntity json = new StringEntity(mapper.writeValueAsString(addDetections), ContentType.APPLICATION_JSON);
