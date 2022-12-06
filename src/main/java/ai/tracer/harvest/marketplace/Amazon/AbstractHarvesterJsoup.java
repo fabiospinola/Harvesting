@@ -22,10 +22,10 @@ public abstract class AbstractHarvesterJsoup implements MarketplaceHarvester {
     public List<MarketplaceDetection> parseTarget(String searchTerm, int numItems) throws HarvestException {
         int pageOrder = 0;
 
-        this.baseurl = baseurl + searchTerm;
-
+        //this.baseurl = baseurl + searchTerm;
+        String baseUrl = baseurl + searchTerm;
         try {
-            Document doc = Jsoup.connect(baseurl).userAgent(userAgent).get();
+            Document doc = Jsoup.connect(baseUrl).userAgent(userAgent).get();
             System.out.printf("Title: %s\n\n\n\n", doc.title());
             return parseTarget(doc, numItems);
 

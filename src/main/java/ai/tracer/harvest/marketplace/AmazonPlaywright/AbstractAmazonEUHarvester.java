@@ -12,7 +12,7 @@ public abstract class AbstractAmazonEUHarvester implements MarketplaceHarvester 
 
     private String baseUrl;
 
-    public AbstractAmazonEUHarvester(String baseUrl) {
+    protected AbstractAmazonEUHarvester(String baseUrl) {
         this.baseUrl = baseUrl;
     }
     @Override
@@ -90,7 +90,7 @@ public abstract class AbstractAmazonEUHarvester implements MarketplaceHarvester 
                 System.out.println(listUrl.get(i));
                 System.out.println(listImgurl.get(i));
                 System.out.println(listDescription.get(i) + "\n");
-                detections.add(new MarketplaceDetectionItem(listTitles.get(i),listDescription.get(i), listUrl.get(i),listImgurl.get(i),pageOrder,listSponsored.get(i),listPrices.get(i)));
+                detections.add(new MarketplaceDetectionItem(listTitles.get(i),listDescription.get(i), listUrl.get(i),listImgurl.get(i),pageOrder,listSponsored.get(i),listPrices.get(i),"open","new","Default","Harvester"));
             }
             playwrightBrowser.close();
         }

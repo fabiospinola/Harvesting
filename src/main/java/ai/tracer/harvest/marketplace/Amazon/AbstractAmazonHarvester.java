@@ -54,16 +54,34 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
                 listingURL = ("https://www.amazon" + domain + listing.get(i).getElementsByClass("a-link-normal s-no-outline").attr("href"));
             }
             String description = getDescription(listingURL, userAgent);
+            String detectionState = "new";
+            String detectionStatus = "open";
+            String detectionReason = "Default";
+            String detectionAnalyst = "Harvester";
 
             System.out.println("#" + pageOrder + " - " + listingTitle + " - " + listingURL);
             System.out.println("\t\t" + imageUrl);
             System.out.println("\t\tSponsored: " + isPaidSearch);
             System.out.println("\t\tPrice: " + listingPrice + "$");
             System.out.println("\t\tDescription: " + description);
+            System.out.println("\t\tState: " + detectionState);
+            System.out.println("\t\tStatus: " + detectionStatus);
+            System.out.println("\t\tReason: " + detectionReason);
+            System.out.println("\t\tAnalyst: " + detectionAnalyst);
+            System.out.println();
             System.out.println("\n");
 
-            detections.add(new MarketplaceDetectionItem(listingTitle, description, listingURL, imageUrl,pageOrder, isPaidSearch, listingPrice));
-
+            detections.add(new MarketplaceDetectionItem(listingTitle,
+                    description,
+                    listingURL,
+                    imageUrl,
+                    pageOrder,
+                    isPaidSearch,
+                    listingPrice,
+                    "open",
+                    "new",
+                    "Default",
+                    "Harvester"));
         }
         return detections;
     }

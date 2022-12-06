@@ -98,7 +98,7 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
 
         String paid = Objects.equals(sponsor, sponsoredClassName) ? "true" : "false";
 
-        return new MarketplaceDetectionItem(title, description, url, imageUrl, index, paid, price);
+        return new MarketplaceDetectionItem(title, description, url, imageUrl, index, paid, price,"open","new","Default","Harvester");
     }
 
     private static WebClient getWebClient() {

@@ -15,4 +15,17 @@ public interface MarketplaceDetection {
     String getSponsored();
 
     String getPrice();
+    
+    String getState();
+    
+    String getStatus();
+
+    String getReason_code();
+
+    String getAnalyst();
+
+    String setState(String state);
+    String setStatus(String state);
+    String setReason_code(String state);
+    String setAnalyst(String state);
 }
