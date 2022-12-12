@@ -34,10 +34,12 @@ abstract class AbstractAmazonHarvesterTest {
         List<MarketplaceDetection> detections = null;
         try {
             Document doc = getHtml(searchHtml);
-            detections = harvester.parseTargetTest(String.valueOf(doc), numresults);
+            detections = harvester.parseTargetTest(String.valueOf(doc), numresults, 0L);
             Assertions.assertNotNull(detections);
             Assertions.assertTrue(detections.size() == numresults, "Expect " + numresults);
         } catch (HarvestException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

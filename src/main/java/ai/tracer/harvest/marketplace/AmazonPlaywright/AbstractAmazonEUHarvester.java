@@ -2,6 +2,7 @@ package ai.tracer.harvest.marketplace.AmazonPlaywright;
 
 import ai.tracer.harvest.api.MarketplaceDetection;
 import ai.tracer.harvest.api.MarketplaceHarvester;
+import ai.tracer.harvest.httpclient.Operations;
 import ai.tracer.harvest.marketplace.MarketplaceDetectionItem;
 import com.microsoft.playwright.*;
 
@@ -12,11 +13,11 @@ public abstract class AbstractAmazonEUHarvester implements MarketplaceHarvester 
 
     private String baseUrl;
 
-    public AbstractAmazonEUHarvester(String baseUrl) {
+    protected AbstractAmazonEUHarvester(String baseUrl) {
         this.baseUrl = baseUrl;
     }
     @Override
-    public List<MarketplaceDetection> parseTarget(String term, int numItems) {
+    public List<MarketplaceDetection> parseTarget(String term, int numItems, Long customer_id) {
         ArrayList<MarketplaceDetection> detections = new ArrayList<>();
         try (Playwright playwright = Playwright.create())
         {
@@ -90,9 +91,11 @@ public abstract class AbstractAmazonEUHarvester implements MarketplaceHarvester 
                 System.out.println(listUrl.get(i));
                 System.out.println(listImgurl.get(i));
                 System.out.println(listDescription.get(i) + "\n");
-                detections.add(new MarketplaceDetectionItem(listTitles.get(i),listDescription.get(i), listUrl.get(i),listImgurl.get(i),pageOrder,listSponsored.get(i),listPrices.get(i)));
+                detections.add(new MarketplaceDetectionItem(listTitles.get(i),listDescription.get(i), listUrl.get(i),listImgurl.get(i),pageOrder,listSponsored.get(i),listPrices.get(i),"open","new","Default","Harvester", customer_id));
             }
             playwrightBrowser.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return detections;
     }

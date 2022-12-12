@@ -2,6 +2,7 @@ package ai.tracer.harvest.marketplace.Amazon;
 
 import ai.tracer.harvest.api.HarvestException;
 import ai.tracer.harvest.api.MarketplaceDetection;
+import ai.tracer.harvest.httpclient.Operations;
 import ai.tracer.harvest.marketplace.MarketplaceDetectionItem;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -26,7 +27,7 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
         super(baseUrl);
     }
     @Override
-    protected List<MarketplaceDetection> parseTarget(Document doc, int numItems) throws HarvestException {
+    protected List<MarketplaceDetection> parseTarget(Document doc, int numItems, Long customer_id) throws Exception {
         int pageOrder = 0;
 
         ArrayList<MarketplaceDetection> detections = new ArrayList<>();
@@ -54,16 +55,35 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
                 listingURL = ("https://www.amazon" + domain + listing.get(i).getElementsByClass("a-link-normal s-no-outline").attr("href"));
             }
             String description = getDescription(listingURL, userAgent);
+            String detectionState = "new";
+            String detectionStatus = "open";
+            String detectionReason = "Default";
+            String detectionAnalyst = "Harvester";
 
             System.out.println("#" + pageOrder + " - " + listingTitle + " - " + listingURL);
             System.out.println("\t\t" + imageUrl);
             System.out.println("\t\tSponsored: " + isPaidSearch);
             System.out.println("\t\tPrice: " + listingPrice + "$");
             System.out.println("\t\tDescription: " + description);
+            System.out.println("\t\tState: " + detectionState);
+            System.out.println("\t\tStatus: " + detectionStatus);
+            System.out.println("\t\tReason: " + detectionReason);
+            System.out.println("\t\tAnalyst: " + detectionAnalyst);
+            System.out.println();
             System.out.println("\n");
 
-            detections.add(new MarketplaceDetectionItem(listingTitle, description, listingURL, imageUrl,pageOrder, isPaidSearch, listingPrice));
-
+            detections.add(new MarketplaceDetectionItem(listingTitle,
+                    description,
+                    listingURL,
+                    imageUrl,
+                    pageOrder,
+                    isPaidSearch,
+                    listingPrice,
+                    "open",
+                    "new",
+                    "Default",
+                    "Harvester",
+                    customer_id));
         }
         return detections;
     }

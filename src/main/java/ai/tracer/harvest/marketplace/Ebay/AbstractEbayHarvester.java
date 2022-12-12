@@ -3,6 +3,7 @@ package ai.tracer.harvest.marketplace.Ebay;
 import ai.tracer.harvest.api.HarvestException;
 import ai.tracer.harvest.api.MarketplaceDetection;
 import ai.tracer.harvest.api.MarketplaceHarvester;
+import ai.tracer.harvest.httpclient.Operations;
 import ai.tracer.harvest.marketplace.MarketplaceDetectionItem;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
@@ -28,20 +29,22 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
     }
 
     @Override
-    public List<MarketplaceDetection> parseTarget(String term, int numItems) throws HarvestException {
+    public List<MarketplaceDetection> parseTarget(String term, int numItems,Long customer_id) throws HarvestException {
         WebClient client = getWebClient();
         try {
             String baseUrl = this.baseUrl + URLEncoder.encode(term, StandardCharsets.UTF_8);
 
             HtmlPage page = client.getPage(baseUrl);
-            return parseTargetInternalHtmlUnit(page, numItems);
+            return parseTargetInternalHtmlUnit(page, numItems, customer_id);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public List<MarketplaceDetection> parseTargetInternalHtmlUnit(HtmlPage page, int numItems) throws HarvestException, IOException {
+    public List<MarketplaceDetection> parseTargetInternalHtmlUnit(HtmlPage page, int numItems,Long customer_id) throws Exception {
         ArrayList<MarketplaceDetection> detections = new ArrayList<>();
         List<HtmlElement> items = getElementsHtmlUnit(page);
         HashMap<String, Integer> sponsoredClassNames = new HashMap<>();
@@ -55,7 +58,7 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
         int index = 0;
         for (HtmlElement src : items) {
             if (index == numItems) break;
-            detections.add(createDetectionHtmlUnit(src, ++index, sponsoredClassName));
+            detections.add(createDetectionHtmlUnit(src, ++index, sponsoredClassName, customer_id));
         }
         return detections;
     }
@@ -71,7 +74,7 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
         EbayDynamicClass.assignValueAndKey(sponsoredClassNames, classValue);
     }
 
-    protected MarketplaceDetection createDetectionHtmlUnit(HtmlElement src, int index, String sponsoredClassName) throws IOException {
+    protected MarketplaceDetection createDetectionHtmlUnit(HtmlElement src, int index, String sponsoredClassName, Long customer_id) throws Exception {
 
         WebClient client = getWebClient();
 
@@ -98,7 +101,7 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
 
         String paid = Objects.equals(sponsor, sponsoredClassName) ? "true" : "false";
 
-        return new MarketplaceDetectionItem(title, description, url, imageUrl, index, paid, price);
+        return new MarketplaceDetectionItem(title, description, url, imageUrl, index, paid, price,"open","new","Default","Harvester", customer_id);
     }
 
     private static WebClient getWebClient() {
