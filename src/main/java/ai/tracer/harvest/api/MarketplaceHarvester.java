@@ -13,5 +13,5 @@ public interface MarketplaceHarvester{
      * @throws HarvestException
      */
 
-    List<MarketplaceDetection> parseTarget(String term, int numItems) throws HarvestException, InterruptedException, IOException;
+    List<MarketplaceDetection> parseTarget(String term, int numItems, Long customer_id) throws HarvestException, InterruptedException, IOException;
 }

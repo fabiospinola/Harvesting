@@ -19,7 +19,7 @@ public abstract class AbstractHarvesterJsoup implements MarketplaceHarvester {
     }
 
     @Override
-    public List<MarketplaceDetection> parseTarget(String searchTerm, int numItems) throws HarvestException {
+    public List<MarketplaceDetection> parseTarget(String searchTerm, int numItems,Long customer_id) throws HarvestException {
         int pageOrder = 0;
 
         //this.baseurl = baseurl + searchTerm;
@@ -27,24 +27,26 @@ public abstract class AbstractHarvesterJsoup implements MarketplaceHarvester {
         try {
             Document doc = Jsoup.connect(baseUrl).userAgent(userAgent).get();
             System.out.printf("Title: %s\n\n\n\n", doc.title());
-            return parseTarget(doc, numItems);
+            return parseTarget(doc, numItems,customer_id);
 
         } catch (IOException e) {
             e.printStackTrace();
             throw new HarvestException();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public List<MarketplaceDetection> parseTargetTest(String searchTerm, int numItems) throws HarvestException {
+    public List<MarketplaceDetection> parseTargetTest(String searchTerm, int numItems,Long customer_id) throws Exception {
         int pageOrder = 0;
 
         this.baseurl = baseurl + searchTerm;
 
         Document doc = Jsoup.parse(searchTerm);
         System.out.printf("Title: %s\n\n\n\n", doc.title());
-        return parseTarget(doc, numItems);
+        return parseTarget(doc, numItems,customer_id);
 
     }
 
-    protected abstract List<MarketplaceDetection> parseTarget(Document doc, int numItems) throws HarvestException;
+    protected abstract List<MarketplaceDetection> parseTarget(Document doc, int numItems, Long customer_id) throws Exception;
 }

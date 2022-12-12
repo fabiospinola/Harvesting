@@ -2,7 +2,8 @@ package ai.tracer.harvest.httpclient;
 
 import ai.tracer.harvest.api.MarketplaceDetection;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
+import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -10,20 +11,24 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Operations {
-    final static CloseableHttpClient httpClient = HttpClients.createDefault();
+    //final static CloseableHttpClient httpClient = HttpClients.createDefault();
 
     public static void postADetection(List<MarketplaceDetection> detectionList) throws Exception {
 
+        CloseableHttpClient httpClient = HttpClients.createDefault();
         int counter;
         for (counter = 0; counter < detectionList.size(); counter++) {
-            HttpPost request = new HttpPost("http://localhost:8080/api/createDetection");
+            HttpPost request = new HttpPost("http://localhost:8080/api/detection");
 
             ObjectMapper mapper = new ObjectMapper();
             StringEntity json = new StringEntity(mapper.writeValueAsString(detectionList.get(counter)), ContentType.APPLICATION_JSON);
@@ -38,14 +43,59 @@ public class Operations {
             response.close();
         }
     }
-    public static ArrayList<String> getSearchTerm() throws IOException {
-        HttpGet request = new HttpGet("http://localhost:8080/api/searchterm");
-        HttpResponse httpresponse = httpClient.execute(request);
-        ArrayList<String> terms = new ArrayList<>();
-        Scanner sc = new Scanner(httpresponse.getEntity().getContent());
-        while(sc.hasNext()) {
-            terms.add(sc.nextLine());
+    public static ArrayList<String> getBrandTracks() throws Exception {
+        ArrayList<String> brandTracksArrayList = new ArrayList<>();
+        JSONArray obj;
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        final HttpGet httpGet = new HttpGet("http://localhost:8080/api/brandTracks");
+        CloseableHttpResponse response = httpClient.execute(httpGet);
+        try (httpClient) {
+            try{
+                StatusLine statusLine = response.getStatusLine();
+                System.out.println(statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
+                String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+                obj = new JSONArray(responseBody);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            for(int i = 0; i < obj.length(); i++){
+                System.out.println("# "+ i + " " + obj.getJSONObject(i).getString("term"));
+                brandTracksArrayList.add(obj.getJSONObject(i).getString("term"));
+            }
         }
-        return terms;
+        response.close();
+        return brandTracksArrayList;
     }
+    public static ArrayList<Long> getCustomerIds() throws Exception {
+        ArrayList<Long> customerIds = new ArrayList<>();
+        JSONArray obj;
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        final HttpGet httpGet = new HttpGet("http://localhost:8080/api/brandtracks");
+        CloseableHttpResponse response = httpClient.execute(httpGet);
+        try (httpClient) {
+            try{
+                StatusLine statusLine = response.getStatusLine();
+                System.out.println(statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
+                String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+                obj = new JSONArray(responseBody);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            for(int i = 0; i < obj.length(); i++){
+                //System.out.println("# "+ i + " " + obj.getJSONObject(i).getString("customer_id"));
+                customerIds.add(Long.valueOf(obj.getJSONObject(i).getString("customer_id")));
+            }
+        }
+        response.close();
+        return customerIds;
+    }
+
 }

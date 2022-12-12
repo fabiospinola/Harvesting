@@ -8,7 +8,6 @@ import ai.tracer.harvest.marketplace.Amazon.AmazonUkHarvester;
 import ai.tracer.harvest.marketplace.Amazon.AmazonUsHarvester;
 import ai.tracer.harvest.marketplace.Ebay.EbayUkHarvester;
 import ai.tracer.harvest.marketplace.Ebay.EbayUsHarvester;
-import ai.tracer.harvest.rulesengine.RulesEngine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,45 +30,30 @@ public class Main {
         List<MarketplaceDetection> detectionsAUK = null;
         List<MarketplaceDetection> detectionsEUS = null;
         List<MarketplaceDetection> detectionsEUK = null;
-        ArrayList<String> searchterms = Operations.getSearchTerm();
-        ArrayList<String> terms = new ArrayList<>();
 
-        for (int i = 0; i < searchterms.size(); i++) {
-            terms.add(searchterms.get(0).split("\",\"")[i]);
-        }
-        for (int i = 0; i < terms.size(); i++) {
-            String searchTerm = terms.get(i).replace("[", "").replace("]", "").replace("\"", "");
-            int numItems = 10;
+        ArrayList<String> brandTracks = Operations.getBrandTracks();
+        ArrayList<Long> customer_ids = Operations.getCustomerIds();
+
+        for (int i = 0; i < brandTracks.size(); i++) {
+            int numItems = 3;
             try {
-                /*detectionsAES = harvestAES.parseTarget(searchTerm, numItems);
-                detectionsAES = RulesEngine.verifyDescription(detectionsAES,"inflable","enforcing");
-                detectionsAES = RulesEngine.verifyDescription(detectionsAES,"Jacuzzi®","fair-use");
+                detectionsAES = harvestAES.parseTarget(brandTracks.get(i), numItems,customer_ids.get(i));
                 Operations.postADetection(detectionsAES);
-                //Operations.postADetection(RulesEngine.verifyDescription(detectionsAES,"hinchable","enforcing"));
-                detectionsANL = harvestANL.parseTarget(searchTerm, numItems);
-                detectionsANL = RulesEngine.verifyDescription(detectionsANL,"inflatable","enforcing");
-                detectionsANL = RulesEngine.verifyDescription(detectionsANL,"Jacuzzi®","fair-use");
+                detectionsANL = harvestANL.parseTarget(brandTracks.get(i), numItems,customer_ids.get(i));
                 Operations.postADetection(detectionsANL);
-                detectionsAUS = harvestAUS.parseTarget(searchTerm, numItems);
-                detectionsAUS =RulesEngine.verifyDescription(detectionsAUS, "inflatable","enforcing");
-                detectionsAUS =RulesEngine.verifyDescription(detectionsAUS, "Jacuzzi®","fair-use");
+                detectionsAUS = harvestAUS.parseTarget(brandTracks.get(i), numItems,customer_ids.get(i));
                 Operations.postADetection(detectionsAUS);
-                detectionsAUK = harvestAUK.parseTarget(searchTerm, numItems);
-                detectionsAUK =RulesEngine.verifyDescription(detectionsAUK, "inflatable","enforcing");
-                detectionsAUK =RulesEngine.verifyDescription(detectionsAUK, "Jacuzzi®","fair-use");
-                Operations.postADetection(detectionsAUK);-*/
-                detectionsEUS = harvestEUS.parseTarget(searchTerm, numItems);
-                detectionsEUS =RulesEngine.verifyDescription(detectionsEUS, "inflatable","enforcing");
-                detectionsEUS =RulesEngine.verifyDescription(detectionsEUS, "Jacuzzi®","fair-use");
+                detectionsAUK = harvestAUK.parseTarget(brandTracks.get(i), numItems,customer_ids.get(i));
+                Operations.postADetection(detectionsAUK);
+                detectionsEUS = harvestEUS.parseTarget(brandTracks.get(i), numItems,customer_ids.get(i));
                 Operations.postADetection(detectionsEUS);
-                detectionsEUK = harvestEUK.parseTarget(searchTerm, numItems);
-                detectionsEUK =RulesEngine.verifyDescription(detectionsEUK, "inflatable","enforcing");
-                detectionsEUK =RulesEngine.verifyDescription(detectionsEUK, "Jacuzzi®","fair-use");
+                detectionsEUK = harvestEUK.parseTarget(brandTracks.get(i), numItems,customer_ids.get(i));
                 Operations.postADetection(detectionsEUK);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            System.out.println("Got your data? Now leave me to rest!!! ( ͠° ͟ʖ ͡°)");
         }
-        System.out.println("Got your data? Now leave me to rest!!! ( ͠° ͟ʖ ͡°)");
+
     }
 }

@@ -24,8 +24,11 @@ public interface MarketplaceDetection {
 
     String getAnalyst();
 
+    Long getCustomer_id();
+
     String setState(String state);
     String setStatus(String state);
     String setReason_code(String state);
     String setAnalyst(String state);
+    Long setCustomerId(Long customer_id);
 }

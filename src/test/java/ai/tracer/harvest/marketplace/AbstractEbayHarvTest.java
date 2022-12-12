@@ -31,10 +31,10 @@ public abstract class AbstractEbayHarvTest {
         List<MarketplaceDetection> detections = null;
         try {
             HtmlPage page = getHtmlPage(repleteResultsHTml);
-            detections = abstractEbayHarvester.parseTargetInternalHtmlUnit(page, numResults);
+            detections = abstractEbayHarvester.parseTargetInternalHtmlUnit(page, numResults,0L);
             Assertions.assertNotNull(detections);
             Assertions.assertTrue(detections.size() == numResults);
-        } catch (HarvestException | IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -45,11 +45,11 @@ public abstract class AbstractEbayHarvTest {
 
         try {
             HtmlPage htmlPage = getHtmlPage(emptyResultsHtml);
-            detections = abstractEbayHarvester.parseTargetInternalHtmlUnit(htmlPage, 10);
+            detections = abstractEbayHarvester.parseTargetInternalHtmlUnit(htmlPage, 10,0L);
             Assertions.assertNotNull(detections);
             Assertions.assertTrue(detections.size() == 0, "No items expected");
 
-        } catch (IOException | HarvestException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
