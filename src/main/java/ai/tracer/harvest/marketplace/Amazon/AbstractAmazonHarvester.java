@@ -82,7 +82,7 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
                     "open",
                     "new",
                     "Default",
-                    "Harvester",
+                    1L,
                     customer_id));
         }
         return detections;

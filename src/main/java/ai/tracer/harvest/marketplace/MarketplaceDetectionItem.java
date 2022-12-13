@@ -13,11 +13,11 @@ public class MarketplaceDetectionItem implements MarketplaceDetection {
     private String price;
     private String state;
     private String status;
-    private String reason_code;
-    private String analyst;
-    private Long customer_id;
+    private String reasonCode;
+    private Long analystId;
+    private Long customerId;
 
-    public MarketplaceDetectionItem(String title, String description, String url, String imageUrl, Integer order, String sponsored, String price, String state, String status, String reason_code, String analyst, Long customer_id) {
+    public MarketplaceDetectionItem(String title, String description, String url, String imageUrl, Integer order, String sponsored, String price, String state, String status, String reasonCode, Long analystId, Long customerId) {
         this.title = title;
         this.description = description;
         this.url = url;
@@ -27,9 +27,9 @@ public class MarketplaceDetectionItem implements MarketplaceDetection {
         this.price = price;
         this.state = state;
         this.status = status;
-        this.reason_code = reason_code;
-        this.analyst = analyst;
-        this.customer_id = customer_id;
+        this.reasonCode = reasonCode;
+        this.analystId = analystId;
+        this.customerId = customerId;
     }
 
     @Override
@@ -75,15 +75,14 @@ public class MarketplaceDetectionItem implements MarketplaceDetection {
         return status;
     }
     @Override
-    public String getReason_code() {
-        return reason_code;
+    public String getReasonCode() {
+        return reasonCode;
     }
     @Override
-    public String getAnalyst() {
-        return analyst;
+    public Long getAnalystId(){return analystId;
     }
     @Override
-    public Long getCustomer_id(){return customer_id;}
+    public Long getCustomerId(){return customerId;}
 
     @Override
     public String setState(String state) {
@@ -98,21 +97,21 @@ public class MarketplaceDetectionItem implements MarketplaceDetection {
     }
 
     @Override
-    public String setReason_code(String reason_code) {
-        this.reason_code = reason_code;
-        return this.reason_code;
+    public String setReasonCode(String reasonCode) {
+        this.reasonCode = reasonCode;
+        return this.reasonCode;
     }
 
     @Override
-    public String setAnalyst(String analyst) {
-        this.analyst = analyst;
-        return this.analyst;
+    public Long setAnalystId(Long analystId) {
+        this.analystId = analystId;
+        return this.analystId;
     }
 
     @Override
-    public Long setCustomerId(Long customer_id) {
-        this.customer_id = customer_id;
-        return this.customer_id;
+    public Long setCustomerId(Long customerId) {
+        this.customerId = customerId;
+        return this.customerId;
     }
 
 }

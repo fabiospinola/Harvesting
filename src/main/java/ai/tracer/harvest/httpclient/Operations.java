@@ -91,7 +91,7 @@ public class Operations {
             }
             for(int i = 0; i < obj.length(); i++){
                 //System.out.println("# "+ i + " " + obj.getJSONObject(i).getString("customer_id"));
-                customerIds.add(Long.valueOf(obj.getJSONObject(i).getString("customer_id")));
+                customerIds.add(Long.valueOf(obj.getJSONObject(i).getString("customerId")));
             }
         }
         response.close();

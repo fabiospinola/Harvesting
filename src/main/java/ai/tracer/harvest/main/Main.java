@@ -24,18 +24,18 @@ public class Main {
         AmazonUkHarvester harvestAUK = new AmazonUkHarvester();
         EbayUsHarvester harvestEUS = new EbayUsHarvester();
         EbayUkHarvester harvestEUK = new EbayUkHarvester();
-        List<MarketplaceDetection> detectionsAES = null;
-        List<MarketplaceDetection> detectionsANL = null;
-        List<MarketplaceDetection> detectionsAUS = null;
-        List<MarketplaceDetection> detectionsAUK = null;
-        List<MarketplaceDetection> detectionsEUS = null;
-        List<MarketplaceDetection> detectionsEUK = null;
+        List<MarketplaceDetection> detectionsAES;
+        List<MarketplaceDetection> detectionsANL;
+        List<MarketplaceDetection> detectionsAUS;
+        List<MarketplaceDetection> detectionsAUK;
+        List<MarketplaceDetection> detectionsEUS;
+        List<MarketplaceDetection> detectionsEUK;
 
         ArrayList<String> brandTracks = Operations.getBrandTracks();
         ArrayList<Long> customer_ids = Operations.getCustomerIds();
 
         for (int i = 0; i < brandTracks.size(); i++) {
-            int numItems = 3;
+            int numItems = 4;
             try {
                 detectionsAES = harvestAES.parseTarget(brandTracks.get(i), numItems,customer_ids.get(i));
                 Operations.postADetection(detectionsAES);
