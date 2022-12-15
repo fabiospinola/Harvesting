@@ -35,7 +35,7 @@ public class Main {
         ArrayList<Long> customer_ids = Operations.getCustomerIds();
 
         for (int i = 0; i < brandTracks.size(); i++) {
-            int numItems = 4;
+            int numItems = 2;
             try {
                 detectionsAES = harvestAES.parseTarget(brandTracks.get(i), numItems,customer_ids.get(i));
                 Operations.postADetection(detectionsAES);
