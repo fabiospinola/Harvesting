@@ -25,7 +25,7 @@ public abstract class AbstractEbayHarvTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 5, 10, 20})
+    @ValueSource(ints = {0, 5})
     public void testWithResults(int numResults) {
         List<MarketplaceDetection> detections = null;
         try {
