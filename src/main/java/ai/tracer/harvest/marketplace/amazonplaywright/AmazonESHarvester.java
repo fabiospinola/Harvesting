@@ -1,4 +1,4 @@
-package ai.tracer.harvest.marketplace.AmazonPlaywright;
+package ai.tracer.harvest.marketplace.amazonplaywright;
 
 public class AmazonESHarvester extends AbstractAmazonEUHarvester{
     public AmazonESHarvester(){

@@ -1,4 +1,4 @@
-package ai.tracer.harvest.marketplace.Amazon;
+package ai.tracer.harvest.marketplace.amazon;
 
 import ai.tracer.harvest.api.HarvestException;
 import ai.tracer.harvest.api.MarketplaceDetection;

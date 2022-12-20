@@ -20,15 +20,15 @@ public interface MarketplaceDetection {
     
     String getStatus();
 
-    String getReason_code();
+    String getReasonCode();
 
-    String getAnalyst();
+    Long getAnalystId();
 
-    Long getCustomer_id();
+    Long getCustomerId();
 
     String setState(String state);
     String setStatus(String state);
-    String setReason_code(String state);
-    String setAnalyst(String state);
-    Long setCustomerId(Long customer_id);
+    String setReasonCode(String state);
+    Long setAnalystId(Long analystId);
+    Long setCustomerId(Long customerId);
 }

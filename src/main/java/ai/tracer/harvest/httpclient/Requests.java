@@ -20,8 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Operations {
-    //final static CloseableHttpClient httpClient = HttpClients.createDefault();
+public class Requests {
 
     public static void postADetection(List<MarketplaceDetection> detectionList) throws Exception {
 
@@ -47,7 +46,7 @@ public class Operations {
         ArrayList<String> brandTracksArrayList = new ArrayList<>();
         JSONArray obj;
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        final HttpGet httpGet = new HttpGet("http://localhost:8080/api/brandTracks");
+        final HttpGet httpGet = new HttpGet("http://localhost:8080/api/brandtracks");
         CloseableHttpResponse response = httpClient.execute(httpGet);
         try (httpClient) {
             try{
@@ -90,8 +89,7 @@ public class Operations {
                 throw new RuntimeException(e);
             }
             for(int i = 0; i < obj.length(); i++){
-                //System.out.println("# "+ i + " " + obj.getJSONObject(i).getString("customer_id"));
-                customerIds.add(Long.valueOf(obj.getJSONObject(i).getString("customer_id")));
+                customerIds.add(Long.valueOf(obj.getJSONObject(i).getString("customerId")));
             }
         }
         response.close();

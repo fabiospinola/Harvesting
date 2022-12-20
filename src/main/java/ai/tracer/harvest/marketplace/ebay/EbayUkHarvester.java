@@ -1,4 +1,4 @@
-package ai.tracer.harvest.marketplace.Ebay;
+package ai.tracer.harvest.marketplace.ebay;
 
 public class EbayUkHarvester extends AbstractEbayHarvester{
     public EbayUkHarvester() {

@@ -1,8 +1,7 @@
 package ai.tracer.harvest.marketplace;
 
-import ai.tracer.harvest.api.HarvestException;
 import ai.tracer.harvest.api.MarketplaceDetection;
-import ai.tracer.harvest.marketplace.Ebay.AbstractEbayHarvester;
+import ai.tracer.harvest.marketplace.ebay.AbstractEbayHarvester;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.jupiter.api.Assertions;
