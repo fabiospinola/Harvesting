@@ -1,13 +1,13 @@
 package ai.tracer.harvest.main;
 
-import ai.tracer.harvest.httpclient.Operations;
-import ai.tracer.harvest.marketplace.AmazonPlaywright.AmazonESHarvester;
-import ai.tracer.harvest.marketplace.AmazonPlaywright.AmazonNLHarvester;
+import ai.tracer.harvest.httpclient.Requests;
+import ai.tracer.harvest.marketplace.amazonplaywright.AmazonESHarvester;
+import ai.tracer.harvest.marketplace.amazonplaywright.AmazonNLHarvester;
 import ai.tracer.harvest.api.MarketplaceDetection;
-import ai.tracer.harvest.marketplace.Amazon.AmazonUkHarvester;
-import ai.tracer.harvest.marketplace.Amazon.AmazonUsHarvester;
-import ai.tracer.harvest.marketplace.Ebay.EbayUkHarvester;
-import ai.tracer.harvest.marketplace.Ebay.EbayUsHarvester;
+import ai.tracer.harvest.marketplace.amazon.AmazonUkHarvester;
+import ai.tracer.harvest.marketplace.amazon.AmazonUsHarvester;
+import ai.tracer.harvest.marketplace.ebay.EbayUkHarvester;
+import ai.tracer.harvest.marketplace.ebay.EbayUsHarvester;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,31 +24,31 @@ public class Main {
         AmazonUkHarvester harvestAUK = new AmazonUkHarvester();
         EbayUsHarvester harvestEUS = new EbayUsHarvester();
         EbayUkHarvester harvestEUK = new EbayUkHarvester();
-        List<MarketplaceDetection> detectionsAES;
-        List<MarketplaceDetection> detectionsANL;
-        List<MarketplaceDetection> detectionsAUS;
-        List<MarketplaceDetection> detectionsAUK;
-        List<MarketplaceDetection> detectionsEUS;
-        List<MarketplaceDetection> detectionsEUK;
+        List<MarketplaceDetection> detectionsAES; //List to save amazon.es detections
+        List<MarketplaceDetection> detectionsANL; //List to save amazon.nl detections
+        List<MarketplaceDetection> detectionsAUS; //List to save amazon.com detections
+        List<MarketplaceDetection> detectionsAUK; //List to save amazon.co.uk detections
+        List<MarketplaceDetection> detectionsEUS; //List to save ebay.com detections
+        List<MarketplaceDetection> detectionsEUK; //List to save ebay.co.uk detections
 
-        ArrayList<String> brandTracks = Operations.getBrandTracks();
-        ArrayList<Long> customer_ids = Operations.getCustomerIds();
+        ArrayList<String> brandTracks = Requests.getBrandTracks();
+        ArrayList<Long> customerIds = Requests.getCustomerIds();
 
         for (int i = 0; i < brandTracks.size(); i++) {
-            int numItems = 2;
+            int numItems = 10;
             try {
-                detectionsAES = harvestAES.parseTarget(brandTracks.get(i), numItems,customer_ids.get(i));
-                Operations.postADetection(detectionsAES);
-                detectionsANL = harvestANL.parseTarget(brandTracks.get(i), numItems,customer_ids.get(i));
-                Operations.postADetection(detectionsANL);
-                detectionsAUS = harvestAUS.parseTarget(brandTracks.get(i), numItems,customer_ids.get(i));
-                Operations.postADetection(detectionsAUS);
-                detectionsAUK = harvestAUK.parseTarget(brandTracks.get(i), numItems,customer_ids.get(i));
-                Operations.postADetection(detectionsAUK);
-                detectionsEUS = harvestEUS.parseTarget(brandTracks.get(i), numItems,customer_ids.get(i));
-                Operations.postADetection(detectionsEUS);
-                detectionsEUK = harvestEUK.parseTarget(brandTracks.get(i), numItems,customer_ids.get(i));
-                Operations.postADetection(detectionsEUK);
+                detectionsAES = harvestAES.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
+                //Requests.postADetection(detectionsAES);
+                //detectionsANL = harvestANL.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
+                //Requests.postADetection(detectionsANL);
+                //detectionsAUS = harvestAUS.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
+                //Requests.postADetection(detectionsAUS);
+                //detectionsAUK = harvestAUK.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
+                //Requests.postADetection(detectionsAUK);
+                //detectionsEUS = harvestEUS.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
+                //Requests.postADetection(detectionsEUS);
+                //detectionsEUK = harvestEUK.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
+                //Requests.postADetection(detectionsEUK);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

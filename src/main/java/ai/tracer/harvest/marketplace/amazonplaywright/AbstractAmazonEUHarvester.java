@@ -1,8 +1,7 @@
-package ai.tracer.harvest.marketplace.AmazonPlaywright;
+package ai.tracer.harvest.marketplace.amazonplaywright;
 
 import ai.tracer.harvest.api.MarketplaceDetection;
 import ai.tracer.harvest.api.MarketplaceHarvester;
-import ai.tracer.harvest.httpclient.Operations;
 import ai.tracer.harvest.marketplace.MarketplaceDetectionItem;
 import com.microsoft.playwright.*;
 
@@ -60,10 +59,10 @@ public abstract class AbstractAmazonEUHarvester implements MarketplaceHarvester 
             listPrices = (ArrayList<String>) prices.allInnerTexts();
             for(int i = 0; i< numItems; i++){
                 if(marketName.equals("ES")){
-                    listSponsored.add(String.valueOf(page.locator("xpath=//div[@class=\"a-section a-spacing-base\"]").nth(i).innerText().contains("Patrocinado")));
+                    listSponsored.add(String.valueOf(page.locator("xpath=//div[@class=\"a-section a-spacing-base\"]").nth(i).textContent().contains("Patrocinado")));
                 }
                 else{
-                    listSponsored.add(String.valueOf(page.locator("xpath=//div[@class=\"a-section a-spacing-base\"]").nth(i).innerText().contains("Sponsored")));
+                    listSponsored.add(String.valueOf(page.locator("xpath=//div[@class=\"a-section a-spacing-base\"]").nth(i).textContent().contains("Sponsored")));
                 }
                 listUrl.add(marketUrl + items.locator("xpath=//a[@class=\"a-link-normal s-no-outline\"]").nth(i).getAttribute("href"));
                 listImgurl.add(items.locator("xpath=//img[@class=\"s-image\"]").nth(i).getAttribute("src"));

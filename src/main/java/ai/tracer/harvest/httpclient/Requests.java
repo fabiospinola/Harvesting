@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Operations {
+public class Requests {
 
     public static void postADetection(List<MarketplaceDetection> detectionList) throws Exception {
 

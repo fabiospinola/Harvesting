@@ -1,6 +1,6 @@
 package ai.tracer.harvest.marketplace;
 
-import ai.tracer.harvest.marketplace.Ebay.EbayUsHarvester;
+import ai.tracer.harvest.marketplace.ebay.EbayUsHarvester;
 
 public class EbayUsHarvTest extends AbstractEbayHarvTest {
     public EbayUsHarvTest() {
