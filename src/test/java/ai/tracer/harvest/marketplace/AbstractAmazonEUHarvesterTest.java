@@ -9,25 +9,35 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
 
-abstract class AbstractAmazonEUTest {
-    private String htmlString;
+public abstract class AbstractAmazonEUHarvesterTest {
+    private String pageWithResults;
     private AbstractAmazonEUHarvester harvester;
-    private String htmlItem;
+    private String pageWithoutResults;
 
-    public AbstractAmazonEUTest(AbstractAmazonEUHarvester harvester, String htmlString, String htmlItem){
+    public AbstractAmazonEUHarvesterTest(AbstractAmazonEUHarvester harvester, String pageWithResults, String pageWithoutResults){
         this.harvester = harvester;
-        this.htmlString = htmlString;
-        this.htmlItem = htmlItem;
+        this.pageWithResults = pageWithResults;
+        this.pageWithoutResults = pageWithoutResults;
     }
 
     @ParameterizedTest
-    @ValueSource (ints = {0,1,2,3,5})
+    @ValueSource (ints = {0,5})
     public void testWithResults(int numResults){
         List<MarketplaceDetection> detections = null;
         try{
-            detections = harvester.parseTarget(String.valueOf(htmlString),numResults,0L);
+            detections = harvester.parseTarget(pageWithResults,numResults,0L);
             Assertions.assertNotNull(detections);
             Assertions.assertTrue(detections.size() == numResults);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @Test
+    public void testWithoutResults(){
+        List<MarketplaceDetection> detections = null;
+        try{
+            detections = harvester.parseTarget(pageWithoutResults,1,0L);
+            Assertions.assertNotNull(detections);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

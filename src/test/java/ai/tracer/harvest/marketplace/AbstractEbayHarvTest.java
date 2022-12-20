@@ -57,7 +57,6 @@ public abstract class AbstractEbayHarvTest {
         WebClient client = new WebClient();
         client.getOptions().setJavaScriptEnabled(false);
         client.getOptions().setCssEnabled(false);
-
         return client.getPage(fileName);
     }
 }
