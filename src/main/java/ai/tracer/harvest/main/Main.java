@@ -35,10 +35,10 @@ public class Main {
         ArrayList<Long> customerIds = Requests.getCustomerIds();
 
         for (int i = 0; i < brandTracks.size(); i++) {
-            int numItems = 20;
+            int numItems = 3;
             try {
                 detectionsAES = harvestAES.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
-                /*Requests.postADetection(detectionsAES);
+                Requests.postADetection(detectionsAES);
                 detectionsANL = harvestANL.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
                 Requests.postADetection(detectionsANL);
                 detectionsAUS = harvestAUS.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
@@ -48,7 +48,7 @@ public class Main {
                 detectionsEUS = harvestEUS.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
                 Requests.postADetection(detectionsEUS);
                 detectionsEUK = harvestEUK.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
-                Requests.postADetection(detectionsEUK);*/
+                Requests.postADetection(detectionsEUK);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
