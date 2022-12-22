@@ -7,7 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
-/*abstract class AbstractAmazonEUHarvesterTest {
+abstract class AbstractAmazonEUHarvesterTest {
     private String pageWithResults;
     private AbstractAmazonEUHarvester harvester;
     private String singleItem;
@@ -30,4 +30,4 @@ import java.util.List;
             throw new RuntimeException(e);
         }
     }
-}*/
+}
