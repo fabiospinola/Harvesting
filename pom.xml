@@ -45,7 +45,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>ai.tracer.harvest.main.Main</mainClass>
+                            <mainClass>ai.tracer.harvest.harvestrunner.HarvesterRunner</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
