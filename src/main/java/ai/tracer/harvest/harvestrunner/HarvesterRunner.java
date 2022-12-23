@@ -1,4 +1,4 @@
-package ai.tracer.harvest.main;
+package ai.tracer.harvest.harvestrunner;
 
 import ai.tracer.harvest.httpclient.Requests;
 import ai.tracer.harvest.marketplace.amazonplaywright.AmazonESHarvester;
@@ -11,9 +11,10 @@ import ai.tracer.harvest.marketplace.ebay.EbayUsHarvester;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
-public class Main {
+public class HarvesterRunner {
 
     public static void main(String[] args) throws Exception {
         System.out.println("Leave me alone, I'm Scraping!!! (╯ ͠° ͟ʖ ͡°)╯┻━┻");
@@ -34,15 +35,17 @@ public class Main {
         ArrayList<String> brandTracks = Requests.getBrandTracks();
         ArrayList<Long> customerIds = Requests.getCustomerIds();
 
+        long startTime = System.currentTimeMillis( );
         for (int i = 0; i < brandTracks.size(); i++) {
-            int numItems = 3;
+            int numItems = 10;
             try {
+
                 detectionsAES = harvestAES.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
                 Requests.postADetection(detectionsAES);
                 detectionsANL = harvestANL.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
                 Requests.postADetection(detectionsANL);
-                detectionsAUS = harvestAUS.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
-                Requests.postADetection(detectionsAUS);
+                //detectionsAUS = harvestAUS.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
+                //Requests.postADetection(detectionsAUS);
                 detectionsAUK = harvestAUK.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
                 Requests.postADetection(detectionsAUK);
                 detectionsEUS = harvestEUS.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
@@ -52,8 +55,18 @@ public class Main {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            System.out.println("Got your data? Now leave me to rest!!! ( ͠° ͟ʖ ͡°)");
         }
+        long endTime = System.currentTimeMillis( );
+        long elapsedTime = endTime-startTime;
+        long averagePerBrand = elapsedTime/brandTracks.size();
+        long minutesTime = TimeUnit.MILLISECONDS.toMinutes(elapsedTime);
+        long secondsTime = (TimeUnit.MILLISECONDS.toSeconds(elapsedTime) % 60);
+        long minutesBrand = TimeUnit.MILLISECONDS.toMinutes(averagePerBrand);
+        long secondsBrand = (TimeUnit.MILLISECONDS.toSeconds(averagePerBrand) % 60);
+        System.out.println("Elapsed Time: " + minutesTime + "m" + secondsTime + "s");
+        System.out.println("Average time per brand: " + minutesBrand + "m" + secondsBrand + "s");
 
+        //long minutes = TimeUnit.MILLISECONDS.toMinutes(elapsedTime);
+        System.out.println("Got your data? Now leave me to rest!!! ( ͠° ͟ʖ ͡°)");
     }
 }

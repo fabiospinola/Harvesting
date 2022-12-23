@@ -33,6 +33,7 @@ public abstract class AbstractHarvesterJsoup implements MarketplaceHarvester {
             e.printStackTrace();
             throw new HarvestException();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
