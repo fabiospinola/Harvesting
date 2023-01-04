@@ -9,6 +9,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlImage;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -32,7 +33,7 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
         WebClient client = getWebClient();
         try {
             String baseUrl = this.baseUrl + URLEncoder.encode(term, StandardCharsets.UTF_8);
-
+            //String baseUrl = this.baseUrl + term;
             HtmlPage page = client.getPage(baseUrl);
             return parseTargetInternalHtmlUnit(page, numItems, customer_id);
         } catch (IOException e) {
@@ -91,7 +92,7 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
 
         HtmlPage itemPage = client.getPage(url);
         HtmlElement spanDescription = itemPage.getFirstByXPath(".//div[@class='vim d-item-description']/iframe");
-        String description = spanDescription == null ? "No description available for item for item" : ("\"" + spanDescription.asNormalizedText() + "\"");
+        String description = spanDescription == null ? "No description available for this item" : ("\"" + spanDescription.asNormalizedText() + "\"");
 
         HtmlElement spanSponsored = src.getFirstByXPath(".//div[@class='s-item__details clearfix']//div[@class='s-item__detail s-item__detail--primary'][last()]//span//span");
 
@@ -100,6 +101,14 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
 
         String paid = Objects.equals(sponsor, sponsoredClassName) ? "true" : "false";
 
+        System.out.println("#" + index);
+        System.out.println("Title:" + title);
+        System.out.println("Price:" + price);
+        System.out.println("Sponsored: " + paid);
+        System.out.println("Description: " + description);
+        System.out.println("URL: " + url);
+        System.out.println("ImageURl: " + imageUrl);
+
         return new MarketplaceDetectionItem(title, description, url, imageUrl, index, paid, price,"open","new","Default",1L, customer_id);
     }
 
@@ -107,6 +116,9 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
         WebClient client = new WebClient();
         client.getOptions().setCssEnabled(false);
         client.getOptions().setJavaScriptEnabled(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnScriptError(false);
+        client.getOptions().setPrintContentOnFailingStatusCode(false);
         return client;
     }
 }

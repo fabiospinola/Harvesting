@@ -1,10 +1,10 @@
 package ai.tracer.harvest.marketplace;
 
-import ai.tracer.harvest.marketplace.amazonplaywright.AmazonNLHarvester;
+import ai.tracer.harvest.marketplace.amazonplaywright.AmazonNlHarvester;
 
-public class AmazonNlHarvesterTest extends AbstractAmazonEUHarvesterTest {
+public class AmazonNlHarvesterTest extends AbstractAmazonPlaywrightTest {
     public AmazonNlHarvesterTest(){
-        super(new AmazonNLHarvester(),"file:///Users/fabio.spinola/Documents/WebScraping/Harvesting/WebScraper/src/test/resources/amazonNlSearch.html","file:///Users/fabio.spinola/Documents/WebScraping/Harvesting/WebScraper/src/test/resources/amazonNlItem.html");
+        super(new AmazonNlHarvester(),"file:///Users/fabio.spinola/Documents/WebScraping/Harvesting/WebScraper/src/test/resources/amazonNlSearch.html","file:///Users/fabio.spinola/Documents/WebScraping/Harvesting/WebScraper/src/test/resources/amazonNlItem.html");
     }
 
 }

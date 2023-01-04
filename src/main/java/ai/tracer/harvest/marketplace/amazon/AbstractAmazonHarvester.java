@@ -18,7 +18,7 @@ import java.util.List;
 
 public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
 
-    private String userAgent = "appdetex";
+    private final String userAgent = "appdetex";
 
 
     public AbstractAmazonHarvester(String baseUrl) {
@@ -28,20 +28,34 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
     @Override
     protected List<MarketplaceDetection> parseTarget(Document doc, int numItems, Long customer_id) throws Exception {
         int pageOrder = 0;
-
+        boolean isGalleryView = false;
         ArrayList<MarketplaceDetection> detections = new ArrayList<>();
         String marketplace = doc.title();
         String listingURL = null;
         String domain = doc.getElementsByClass("nav-logo-locale").text();
         Elements listing = doc.getElementsByClass("s-card-container s-overflow-hidden aok-relative puis-include-content-margin puis s-latency-cf-section s-card-border");
+        String listingTitle;
 
+        //when the page is in gallery view the class names are different
+        if(listing.size() == 0){
+            listing = doc.getElementsByClass("s-card-container s-overflow-hidden aok-relative puis-expand-height puis-include-content-margin puis s-latency-cf-section s-card-border");
+            isGalleryView = true;
+        }
+        if(listing.size() < numItems){ //in case the number of listings is less than the number of items wanted
+            numItems = listing.size();
+        }
         for (int i = 0; i < numItems; i++) {
 
             pageOrder ++;
 
             String isPaidSearch = isPaidSearch(listing.get(i));
 
-            String listingTitle = ("\"" + listing.get(i).getElementsByClass("a-size-medium a-color-base a-text-normal").text() + "\"");
+            if(isGalleryView) {
+                listingTitle = ("\"" + listing.get(i).getElementsByClass("a-size-base-plus a-color-base a-text-normal").text() + "\"");
+            }
+            else{
+                listingTitle = ("\"" + listing.get(i).getElementsByClass("a-size-medium a-color-base a-text-normal").text() + "\"");
+            }
 
             String listingPrice = (listing.get(i).getElementsByClass("a-price-whole").text() + listing.get(i).getElementsByClass("a-price-fraction").text());
 

@@ -22,7 +22,7 @@ import java.util.List;
 
 public class Requests {
 
-    public static void postADetection(List<MarketplaceDetection> detectionList) throws Exception {
+    public void postADetection(List<MarketplaceDetection> detectionList) throws Exception {
 
         CloseableHttpClient httpClient = HttpClients.createDefault();
         int counter;
@@ -42,7 +42,8 @@ public class Requests {
             response.close();
         }
     }
-    public static ArrayList<String> getBrandTracks() throws Exception {
+
+    public ArrayList<String> getBrandTracks() throws Exception {
         ArrayList<String> brandTracksArrayList = new ArrayList<>();
         JSONArray obj;
         CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -51,7 +52,7 @@ public class Requests {
         try (httpClient) {
             try{
                 StatusLine statusLine = response.getStatusLine();
-                System.out.println(statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
+                System.out.println(statusLine.getStatusCode() + " CONNECTION OK! " + statusLine.getReasonPhrase());
                 String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
                 obj = new JSONArray(responseBody);
             } catch (IOException e) {
@@ -69,7 +70,7 @@ public class Requests {
         response.close();
         return brandTracksArrayList;
     }
-    public static ArrayList<Long> getCustomerIds() throws Exception {
+    public ArrayList<Long> getCustomerIds() throws Exception {
         ArrayList<Long> customerIds = new ArrayList<>();
         JSONArray obj;
         CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -78,7 +79,7 @@ public class Requests {
         try (httpClient) {
             try{
                 StatusLine statusLine = response.getStatusLine();
-                System.out.println(statusLine.getStatusCode() + " " + statusLine.getReasonPhrase());
+                System.out.println(statusLine.getStatusCode() + " CONNECTION OK! " + statusLine.getReasonPhrase());
                 String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
                 obj = new JSONArray(responseBody);
             } catch (IOException e) {
@@ -89,6 +90,7 @@ public class Requests {
                 throw new RuntimeException(e);
             }
             for(int i = 0; i < obj.length(); i++){
+                System.out.println("# "+ i + " " + obj.getJSONObject(i).getString("customerId"));
                 customerIds.add(Long.valueOf(obj.getJSONObject(i).getString("customerId")));
             }
         }
