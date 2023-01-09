@@ -109,7 +109,7 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
         System.out.println("URL: " + url);
         System.out.println("ImageURl: " + imageUrl);
 
-        return new MarketplaceDetectionItem(title, description, url, imageUrl, index, paid, price,"open","new","Default",1L, customer_id);
+        return new MarketplaceDetectionItem(title, description, url, imageUrl, index, paid, price,"open","new","Default",1L);
     }
 
     private static WebClient getWebClient() {

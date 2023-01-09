@@ -3,7 +3,8 @@ package ai.tracer.harvest.marketplace.amazonplaywright;
 import ai.tracer.harvest.api.MarketplaceDetection;
 import ai.tracer.harvest.api.MarketplaceHarvester;
 import ai.tracer.harvest.marketplace.MarketplaceDetectionItem;
-import ai.tracer.harvest.stopwatch.Stopwatch;
+import ai.tracer.harvest.utils.FailureReason;
+import ai.tracer.harvest.utils.Failures;
 import com.microsoft.playwright.*;
 
 import java.util.*;
@@ -21,8 +22,7 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
     @Override
     public List<MarketplaceDetection> parseTarget(String term, int numItems, Long customer_id) {
         ArrayList<MarketplaceDetection> detections = new ArrayList<>();
-        Stopwatch stopwatch = new Stopwatch();
-        stopwatch.start();
+        Failures failures = new Failures();
         try {
             Playwright playwright = Playwright.create();
             List<String> launchArgs = new ArrayList<>();
@@ -60,7 +60,7 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
 
             listUrl = extractUrls(urls, numItems);
 
-            listInfo = extractInfo(listUrl, page, numItems);
+            listInfo = extractInfo(listUrl, page, numItems, failures);
 
             listTitles = listInfo.get(0);
             listPrices = listInfo.get(1);
@@ -76,32 +76,31 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
                 System.out.println(listUrl.get(i));
                 System.out.println(listImgUrl.get(i));
                 System.out.println(listDescriptions.get(i) + "\n");
-                detections.add(new MarketplaceDetectionItem(listTitles.get(i), listDescriptions.get(i), listUrl.get(i), listImgUrl.get(i), pageOrder, listSponsored.get(i), listPrices.get(i), "open", "new", "Default", 1L, customer_id));
+                detections.add(new MarketplaceDetectionItem(listTitles.get(i), listDescriptions.get(i), listUrl.get(i), listImgUrl.get(i), pageOrder, listSponsored.get(i), listPrices.get(i), "open", "new", "Default", 1L));
             }
             playwrightBrowser.close();
         } catch (Exception e) {
             System.out.println("Exception thrown");
-            e.printStackTrace();
+            //e.printStackTrace();
             //throw new RuntimeException(e);
         }
-        stopwatch.stop();
-        Long seconds = stopwatch.getElapsedTime();
-        System.out.println("Elapsed time: " + seconds + "s");
+        System.out.println("Failures captured:" + failures.getFailureReason());
+        System.out.println("Total number of failures:" + failures.getNumberOfFailures());
         return detections;
     }
 
     private ArrayList<String> extractUrls(Locator locator, int numItems) {
         ArrayList<String> urlList = new ArrayList<>();
-        for (int i = 0; i < numItems; i++) {
-            urlList.add(marketplace + locator.nth(i).getAttribute("href"));
+        for (int i = 0; i <= numItems; i++) {
+            urlList.add(marketplace + locator.nth(i+1).getAttribute("href"));
         }
         return urlList;
     }
 
     private ArrayList<String> extractImgUrls(Locator locator, int numItems) {
         ArrayList<String> imgUrlList = new ArrayList<>();
-        for (int i = 0; i < numItems; i++) {
-            imgUrlList.add(locator.nth(i).getAttribute("src"));
+        for (int i = 0; i <= numItems; i++) {
+            imgUrlList.add(locator.nth(i+1).getAttribute("src"));
         }
         return imgUrlList;
     }
@@ -110,19 +109,19 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
         ArrayList<String> sponsoredList = new ArrayList<>();
         switch (marketplace) {
             case "https://www.amazon.es":
-                for (int i = 0; i < numItems; i++) {
-                    sponsoredList.add(String.valueOf(locator.nth(i).textContent().contains("Patrocinado")));
+                for (int i = 0; i <= numItems; i++) {
+                    sponsoredList.add(String.valueOf(locator.nth(i+1).textContent().contains("Patrocinado")));
                 }
                 break;
             case "https://www.amazon.nl":
-                for (int i = 0; i < numItems; i++) {
-                    sponsoredList.add(String.valueOf(locator.nth(i).textContent().contains("Sponsored")));
+                for (int i = 0; i <= numItems; i++) {
+                    sponsoredList.add(String.valueOf(locator.nth(i+1).textContent().contains("Sponsored")));
                 }
         }
         return sponsoredList;
     }
 
-    public ArrayList<ArrayList<String>> extractInfo(ArrayList<String> url, Page page, int numItems) {
+    public ArrayList<ArrayList<String>> extractInfo(ArrayList<String> url, Page page, int numItems, Failures failures) {
         ArrayList<ArrayList<String>> infoList = new ArrayList<>();
         ArrayList<String> descriptionList = new ArrayList<>();
         ArrayList<String> titleList = new ArrayList<>();
@@ -141,6 +140,8 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
                             priceList.add(pricePath.first().textContent());
                         }
                         catch (Exception e){
+                            failures.setFailureReason(String.valueOf(FailureReason.Unable_To_Find_Information));
+                            failures.addNumberOfFailures();
                             System.out.println("Price Path not found");
                             priceList.add("0");
                         }
@@ -157,6 +158,8 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
                             priceList.add(pricePath.first().textContent());
                         }
                         catch (Exception e){
+                            failures.setFailureReason(String.valueOf(FailureReason.Unable_To_Find_Information));
+                            failures.addNumberOfFailures();
                             System.out.println("Price Path not found");
                             priceList.add("0");
                         }

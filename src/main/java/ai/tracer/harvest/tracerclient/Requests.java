@@ -1,6 +1,7 @@
-package ai.tracer.harvest.httpclient;
+package ai.tracer.harvest.tracerclient;
 
 import ai.tracer.harvest.api.MarketplaceDetection;
+import ai.tracer.harvest.stopwatch.ElapsedTimeItem;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.ParseException;
 import org.apache.http.StatusLine;
@@ -22,7 +23,7 @@ import java.util.List;
 
 public class Requests {
 
-    public void postADetection(List<MarketplaceDetection> detectionList) throws Exception {
+    public void postADetection(List<MarketplaceDetection> detectionList, Long customerId) throws Exception {
 
         CloseableHttpClient httpClient = HttpClients.createDefault();
         int counter;
@@ -30,7 +31,10 @@ public class Requests {
             HttpPost request = new HttpPost("http://localhost:8080/api/detection");
 
             ObjectMapper mapper = new ObjectMapper();
-            StringEntity json = new StringEntity(mapper.writeValueAsString(detectionList.get(counter)), ContentType.APPLICATION_JSON);
+            DetectionJSONCreator creator = new DetectionJSONCreator(detectionList.get(counter),new Customer(customerId));
+            String detectionResponse = mapper.writeValueAsString(creator);
+            System.out.println(detectionResponse);
+            StringEntity json = new StringEntity(detectionResponse, ContentType.APPLICATION_JSON); // TODO: 04/01/2023 substituir para detectionTest
             request.setEntity(json);
             CloseableHttpResponse response = httpClient.execute(request);
 
@@ -43,16 +47,23 @@ public class Requests {
         }
     }
 
+
+
+
     public ArrayList<String> getBrandTracks() throws Exception {
         ArrayList<String> brandTracksArrayList = new ArrayList<>();
         JSONArray obj;
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        final HttpGet httpGet = new HttpGet("http://localhost:8080/api/brandtracks");
+        final HttpGet httpGet = new HttpGet("http://localhost:8080/api/brand-tracks");
         CloseableHttpResponse response = httpClient.execute(httpGet);
         try (httpClient) {
             try{
                 StatusLine statusLine = response.getStatusLine();
-                System.out.println(statusLine.getStatusCode() + " CONNECTION OK! " + statusLine.getReasonPhrase());
+                if (statusLine.getStatusCode() != 200) {
+                    System.out.println("Connection Refused! " + response.getStatusLine().getStatusCode());
+                } else if (statusLine.getStatusCode() == 200) {
+                    System.out.println("Connection OK!");
+                }
                 String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
                 obj = new JSONArray(responseBody);
             } catch (IOException e) {
@@ -74,12 +85,16 @@ public class Requests {
         ArrayList<Long> customerIds = new ArrayList<>();
         JSONArray obj;
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        final HttpGet httpGet = new HttpGet("http://localhost:8080/api/brandtracks");
+        final HttpGet httpGet = new HttpGet("http://localhost:8080/api/brand-tracks");
         CloseableHttpResponse response = httpClient.execute(httpGet);
         try (httpClient) {
             try{
                 StatusLine statusLine = response.getStatusLine();
-                System.out.println(statusLine.getStatusCode() + " CONNECTION OK! " + statusLine.getReasonPhrase());
+                if (statusLine.getStatusCode() != 200) {
+                    System.out.println("Connection Refused! " + response.getStatusLine().getStatusCode());
+                } else if (statusLine.getStatusCode() == 200) {
+                    System.out.println("Connection OK!");
+                }
                 String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
                 obj = new JSONArray(responseBody);
             } catch (IOException e) {
@@ -90,8 +105,9 @@ public class Requests {
                 throw new RuntimeException(e);
             }
             for(int i = 0; i < obj.length(); i++){
-                System.out.println("# "+ i + " " + obj.getJSONObject(i).getString("customerId"));
-                customerIds.add(Long.valueOf(obj.getJSONObject(i).getString("customerId")));
+
+                System.out.println("# "+ i + " " + obj.getJSONObject(i).getJSONObject("customer").getString("id"));
+                customerIds.add(Long.valueOf(obj.getJSONObject(i).getJSONObject("customer").getString("id")));
             }
         }
         response.close();

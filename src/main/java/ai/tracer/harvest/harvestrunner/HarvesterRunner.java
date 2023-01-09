@@ -1,6 +1,6 @@
 package ai.tracer.harvest.harvestrunner;
 
-import ai.tracer.harvest.httpclient.Requests;
+import ai.tracer.harvest.tracerclient.Requests;
 import ai.tracer.harvest.marketplace.amazonplaywright.AmazonEsHarvester;
 import ai.tracer.harvest.marketplace.amazonplaywright.AmazonNlHarvester;
 import ai.tracer.harvest.api.MarketplaceDetection;
@@ -8,6 +8,8 @@ import ai.tracer.harvest.marketplace.amazon.AmazonUkHarvester;
 import ai.tracer.harvest.marketplace.amazon.AmazonUsHarvester;
 import ai.tracer.harvest.marketplace.ebay.EbayUkHarvester;
 import ai.tracer.harvest.marketplace.ebay.EbayUsHarvester;
+import ai.tracer.harvest.stopwatch.Stopwatch;
+import ai.tracer.harvest.utils.Failures;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -40,21 +42,49 @@ public class HarvesterRunner {
         for (int i = 0; i < brandTracks.size(); i++) {
             int numItems = 5;
             try {
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.start();
                 detectionsAES = harvestAES.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
-                request.postADetection(detectionsAES);
-                /*detectionsANL = harvestANL.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
-                request.postADetection(detectionsANL);
+                stopwatch.stop();
+                System.out.println("Elapsed time: " + stopwatch.getElapsedTime() + "s\n");
+                /*stopwatch.start();
+                detectionsANL = harvestANL.parseTarget(brandTracks.get(i), numItems, customerIds.get(i));
+                stopwatch.stop();
+                System.out.println("Elapsed time: " + stopwatch.getElapsedTime() + "s\n");
+                stopwatch.start();
                 detectionsAUS = harvestAUS.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
-                request.postADetection(detectionsAUS);
+                stopwatch.stop();
+                System.out.println("Elapsed time: " + stopwatch.getElapsedTime() + "s\n");
+                stopwatch.start();
                 detectionsAUK = harvestAUK.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
-                request.postADetection(detectionsAUK);
+                stopwatch.stop();
+                System.out.println("Elapsed time: " + stopwatch.getElapsedTime() + "s\n");
+                stopwatch.start();
                 detectionsEUS = harvestEUS.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
-                request.postADetection(detectionsEUS);
+                stopwatch.stop();
+                System.out.println("Elapsed time: " + stopwatch.getElapsedTime() + "s\n");
+                stopwatch.start();
                 detectionsEUK = harvestEUK.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
-                request.postADetection(detectionsEUK);*/
+                stopwatch.stop();
+                System.out.println("Elapsed time: " + stopwatch.getElapsedTime() + "s\n");*/
+
+                request.postADetection(detectionsAES,customerIds.get(i));
+/*
+                request.postADetection(detectionsANL,customerIds.get(i));
+
+                request.postADetection(detectionsAUS,customerIds.get(i));
+
+                request.postADetection(detectionsAUK,customerIds.get(i));
+
+                request.postADetection(detectionsEUS,customerIds.get(i));
+
+                request.postADetection(detectionsEUK,customerIds.get(i));*/
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            // TODO: 05/01/2023 postTimePerHarvest
+
         }
         System.out.println("Got your data? Now leave me to rest!!! ( ͠° ͟ʖ ͡°)");
         System.exit(0);

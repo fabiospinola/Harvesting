@@ -57,8 +57,8 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
                 listingTitle = ("\"" + listing.get(i).getElementsByClass("a-size-medium a-color-base a-text-normal").text() + "\"");
             }
 
-            String listingPrice = (listing.get(i).getElementsByClass("a-price-whole").text() + listing.get(i).getElementsByClass("a-price-fraction").text());
-
+            String listingPrice = (listing.get(i).getElementsByClass("a-price-whole").text() + listing.get(i).getElementsByClass("a-price-fraction").text() + listing.get(i).getElementsByClass("a-price-symbol").text());
+            //String listingPrice = (listing.get(i).getElementsByClass("a-offscreen").text());
             String imageUrl = listing.get(i).getElementsByClass("s-image").attr("src");
 
             if (domain.equals(".us")) {
@@ -76,7 +76,7 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
             System.out.println("#" + pageOrder + " - " + listingTitle + " - " + listingURL);
             System.out.println("\t\t" + imageUrl);
             System.out.println("\t\tSponsored: " + isPaidSearch);
-            System.out.println("\t\tPrice: " + listingPrice + "$");
+            System.out.println("\t\tPrice: " + listingPrice);
             System.out.println("\t\tDescription: " + description);
             System.out.println("\t\tState: " + detectionState);
             System.out.println("\t\tStatus: " + detectionStatus);
@@ -95,8 +95,7 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
                     "open",
                     "new",
                     "Default",
-                    1L,
-                    customer_id));
+                    1L));
         }
         return detections;
     }

@@ -3,6 +3,7 @@ package ai.tracer.harvest.marketplace.amazon;
 import ai.tracer.harvest.api.HarvestException;
 import ai.tracer.harvest.api.MarketplaceDetection;
 import ai.tracer.harvest.api.MarketplaceHarvester;
+import ai.tracer.harvest.utils.Failures;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -19,7 +20,7 @@ public abstract class AbstractHarvesterJsoup implements MarketplaceHarvester {
     }
 
     @Override
-    public List<MarketplaceDetection> parseTarget(String searchTerm, int numItems,Long customer_id) throws HarvestException {
+    public List<MarketplaceDetection> parseTarget(String searchTerm, int numItems, Long customer_id) throws HarvestException {
         int pageOrder = 0;
 
         //this.baseurl = baseurl + searchTerm;
