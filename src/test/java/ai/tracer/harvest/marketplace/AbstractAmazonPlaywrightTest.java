@@ -19,11 +19,11 @@ abstract class AbstractAmazonPlaywrightTest {
     }
 
     @ParameterizedTest
-    @ValueSource (ints = {0,1})
+    @ValueSource (ints = {0,5})
     public void testWithResults(int numResults) {
         List<MarketplaceDetection> detections = null;
         try {
-            detections = harvester.parseTarget(pageWithResults, numResults, 0L);
+            detections = harvester.parseTargetPlayTest(pageWithResults, numResults, 0L);
 
             Assertions.assertNotNull(detections);
             Assertions.assertTrue(detections.size() == numResults);

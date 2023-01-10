@@ -9,7 +9,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlImage;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -91,7 +90,7 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
         String url = anchorUrl == null ? "No item url available for item" : anchorUrl.getHrefAttribute();
 
         HtmlPage itemPage = client.getPage(url);
-        HtmlElement spanDescription = itemPage.getFirstByXPath(".//div[@class='vim d-item-description']/iframe");
+        HtmlElement spanDescription = itemPage.getFirstByXPath(".//div[@class='vim d-item-description']/iframe"); //
         String description = spanDescription == null ? "No description available for this item" : ("\"" + spanDescription.asNormalizedText() + "\"");
 
         HtmlElement spanSponsored = src.getFirstByXPath(".//div[@class='s-item__details clearfix']//div[@class='s-item__detail s-item__detail--primary'][last()]//span//span");

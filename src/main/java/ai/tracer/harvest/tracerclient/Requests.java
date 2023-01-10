@@ -2,6 +2,7 @@ package ai.tracer.harvest.tracerclient;
 
 import ai.tracer.harvest.api.MarketplaceDetection;
 import ai.tracer.harvest.stopwatch.ElapsedTimeItem;
+import ai.tracer.harvest.utils.Failures;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.ParseException;
 import org.apache.http.StatusLine;
@@ -38,16 +39,59 @@ public class Requests {
             request.setEntity(json);
             CloseableHttpResponse response = httpClient.execute(request);
 
-            if (response.getStatusLine().getStatusCode() != 200) {
+            if (response.getStatusLine().getStatusCode() != 200 || response.getStatusLine().getStatusCode() != 201) {
                 System.out.println("No detections added! " + response.getStatusLine().getStatusCode());
-            } else if (response.getStatusLine().getStatusCode() == 200) {
+            } else if (response.getStatusLine().getStatusCode() == 200 || response.getStatusLine().getStatusCode() == 201) {
                 System.out.println("New detection added!");
             }
             response.close();
         }
     }
 
+    public void postTimes(ArrayList<ElapsedTimeItem> timesList) throws IOException {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        int counter;
+        for (counter = 0; counter < timesList.size(); counter++) {
+            HttpPost request = new HttpPost("http://localhost:8080/api/harvester-analytic");
 
+            ObjectMapper mapper = new ObjectMapper();
+
+            String timeResponse = mapper.writeValueAsString(timesList.get(counter));
+            System.out.println(timeResponse);
+            StringEntity json = new StringEntity(timeResponse, ContentType.APPLICATION_JSON);
+            request.setEntity(json);
+            CloseableHttpResponse response = httpClient.execute(request);
+
+            if (response.getStatusLine().getStatusCode() != 200 && response.getStatusLine().getStatusCode() != 201) {
+                System.out.println("No times added! " + response.getStatusLine().getStatusCode());
+            } else if (response.getStatusLine().getStatusCode() == 200 || response.getStatusLine().getStatusCode() == 201) {
+                System.out.println("New time added!");
+            }
+            response.close();
+        }
+    }
+
+    public void postFailures(Failures failures) throws IOException {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        int counter;
+            HttpPost request = new HttpPost("http://localhost:8080/api/failures");
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            String failureResponse = mapper.writeValueAsString(failures);
+            System.out.println(failureResponse);
+            StringEntity json = new StringEntity(failureResponse, ContentType.APPLICATION_JSON);
+            request.setEntity(json);
+            CloseableHttpResponse response = httpClient.execute(request);
+
+            if (response.getStatusLine().getStatusCode() != 200) {
+                System.out.println("No failures posted! " + response.getStatusLine().getStatusCode());
+            } else if (response.getStatusLine().getStatusCode() == 200) {
+                System.out.println("New failures added!");
+            }
+            response.close();
+
+    }
 
 
     public ArrayList<String> getBrandTracks() throws Exception {

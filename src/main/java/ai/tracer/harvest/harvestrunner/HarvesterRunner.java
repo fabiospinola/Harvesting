@@ -1,5 +1,6 @@
 package ai.tracer.harvest.harvestrunner;
 
+import ai.tracer.harvest.stopwatch.ElapsedTimeItem;
 import ai.tracer.harvest.tracerclient.Requests;
 import ai.tracer.harvest.marketplace.amazonplaywright.AmazonEsHarvester;
 import ai.tracer.harvest.marketplace.amazonplaywright.AmazonNlHarvester;
@@ -9,7 +10,6 @@ import ai.tracer.harvest.marketplace.amazon.AmazonUsHarvester;
 import ai.tracer.harvest.marketplace.ebay.EbayUkHarvester;
 import ai.tracer.harvest.marketplace.ebay.EbayUsHarvester;
 import ai.tracer.harvest.stopwatch.Stopwatch;
-import ai.tracer.harvest.utils.Failures;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -38,6 +38,8 @@ public class HarvesterRunner {
 
         ArrayList<String> brandTracks = request.getBrandTracks();
         ArrayList<Long> customerIds = request.getCustomerIds();
+        ArrayList<ElapsedTimeItem> elapsedTimeItems= new ArrayList<>();
+
 
         for (int i = 0; i < brandTracks.size(); i++) {
             int numItems = 5;
@@ -46,30 +48,35 @@ public class HarvesterRunner {
                 stopwatch.start();
                 detectionsAES = harvestAES.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
                 stopwatch.stop();
-                System.out.println("Elapsed time: " + stopwatch.getElapsedTime() + "s\n");
-                /*stopwatch.start();
+                elapsedTimeItems.add(new ElapsedTimeItem(stopwatch.getElapsedTime(),"AmazonES", brandTracks.get(i)));
+
+                stopwatch.start();
                 detectionsANL = harvestANL.parseTarget(brandTracks.get(i), numItems, customerIds.get(i));
                 stopwatch.stop();
-                System.out.println("Elapsed time: " + stopwatch.getElapsedTime() + "s\n");
+                elapsedTimeItems.add(new ElapsedTimeItem(stopwatch.getElapsedTime(),"AmazonNL", brandTracks.get(i)));
+
                 stopwatch.start();
                 detectionsAUS = harvestAUS.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
                 stopwatch.stop();
-                System.out.println("Elapsed time: " + stopwatch.getElapsedTime() + "s\n");
+                elapsedTimeItems.add(new ElapsedTimeItem(stopwatch.getElapsedTime(),"AmazonUS", brandTracks.get(i)));
+
                 stopwatch.start();
                 detectionsAUK = harvestAUK.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
                 stopwatch.stop();
-                System.out.println("Elapsed time: " + stopwatch.getElapsedTime() + "s\n");
+                elapsedTimeItems.add(new ElapsedTimeItem(stopwatch.getElapsedTime(),"AmazonUK", brandTracks.get(i)));
+
                 stopwatch.start();
                 detectionsEUS = harvestEUS.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
                 stopwatch.stop();
-                System.out.println("Elapsed time: " + stopwatch.getElapsedTime() + "s\n");
+                elapsedTimeItems.add(new ElapsedTimeItem(stopwatch.getElapsedTime(),"EbayUS", brandTracks.get(i)));
+
                 stopwatch.start();
                 detectionsEUK = harvestEUK.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
                 stopwatch.stop();
-                System.out.println("Elapsed time: " + stopwatch.getElapsedTime() + "s\n");*/
+                elapsedTimeItems.add(new ElapsedTimeItem(stopwatch.getElapsedTime(),"EbayUK", brandTracks.get(i)));
 
                 request.postADetection(detectionsAES,customerIds.get(i));
-/*
+
                 request.postADetection(detectionsANL,customerIds.get(i));
 
                 request.postADetection(detectionsAUS,customerIds.get(i));
@@ -78,7 +85,7 @@ public class HarvesterRunner {
 
                 request.postADetection(detectionsEUS,customerIds.get(i));
 
-                request.postADetection(detectionsEUK,customerIds.get(i));*/
+                request.postADetection(detectionsEUK,customerIds.get(i));
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -86,6 +93,7 @@ public class HarvesterRunner {
             // TODO: 05/01/2023 postTimePerHarvest
 
         }
+        request.postTimes(elapsedTimeItems);
         System.out.println("Got your data? Now leave me to rest!!! ( ͠° ͟ʖ ͡°)");
         System.exit(0);
     }

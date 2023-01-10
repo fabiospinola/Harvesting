@@ -4,23 +4,27 @@ import java.util.ArrayList;
 
 public class Failures {
 
-    public ArrayList<String> failureReason = null;
+    public Integer numberOfConnectionFailure = 0;
 
-    public Integer numberOfFailures = 0;
+    public Integer numberOfPathFailure = 0;
 
-    public ArrayList<String> getFailureReason() {
-        return failureReason;
+    public Failures(){
+
+    }
+    public Integer getNumberOfConnectionFailure() {
+        return numberOfConnectionFailure;
     }
 
-    public void setFailureReason(String failureReason){
-        this.failureReason.add(failureReason);
+    public void addNumberOfConnectionFailure() {
+        this.numberOfConnectionFailure += 1;
     }
 
-    public Integer getNumberOfFailures() {
-        return numberOfFailures;
+    public Integer getNumberOfPathFailure() {
+        return numberOfPathFailure;
     }
 
-    public void addNumberOfFailures() {
-        this.numberOfFailures += 1;
+    public void addNumberOfPathFailure() {
+        this.numberOfPathFailure += 1;
     }
+
 }
