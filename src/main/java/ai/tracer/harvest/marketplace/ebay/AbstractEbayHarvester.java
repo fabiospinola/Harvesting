@@ -4,6 +4,9 @@ import ai.tracer.harvest.api.HarvestException;
 import ai.tracer.harvest.api.MarketplaceDetection;
 import ai.tracer.harvest.api.MarketplaceHarvester;
 import ai.tracer.harvest.marketplace.MarketplaceDetectionItem;
+import ai.tracer.harvest.stopwatch.HarvesterAnalytics;
+import ai.tracer.harvest.stopwatch.Stopwatch;
+import ai.tracer.harvest.tracerclient.Requests;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -23,6 +26,12 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
     EbayDynamicClass dynamic = new EbayDynamicClass();
     private String baseUrl;
 
+    private HarvesterAnalytics harvesterAnalytics = new HarvesterAnalytics();
+
+    private Requests requests = new Requests();
+
+    private Stopwatch stopwatch = new Stopwatch();
+
     public AbstractEbayHarvester(String baseUrl) {
         this.baseUrl = baseUrl;
     }
@@ -30,14 +39,17 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
     @Override
     public List<MarketplaceDetection> parseTarget(String term, int numItems,Long customer_id) throws HarvestException {
         WebClient client = getWebClient();
+        stopwatch.start();
+        harvesterAnalytics.setBrandTrack(term);
         try {
             String baseUrl = this.baseUrl + URLEncoder.encode(term, StandardCharsets.UTF_8);
             //String baseUrl = this.baseUrl + term;
             HtmlPage page = client.getPage(baseUrl);
             return parseTargetInternalHtmlUnit(page, numItems, customer_id);
         } catch (IOException e) {
+            harvesterAnalytics.addConnectionFailure();
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -51,7 +63,7 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
         for (HtmlElement src : items) {
             parseSponsoredClassNameFromListing(src, sponsoredClassNames);
         }
-        System.out.println("HASMAP: " + sponsoredClassNames);
+        //System.out.println("HASMAP: " + sponsoredClassNames);
 
         String sponsoredClassName = dynamic.countingClassTimes(sponsoredClassNames);
         int index = 0;
@@ -59,6 +71,9 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
             if (index == numItems) break;
             detections.add(createDetectionHtmlUnit(src, ++index, sponsoredClassName, customer_id));
         }
+        harvesterAnalytics.setTime(stopwatch.getElapsedTime());
+        harvesterAnalytics.setHarvester(baseUrl);
+        requests.postHarvesterMetrics(harvesterAnalytics);
         return detections;
     }
 

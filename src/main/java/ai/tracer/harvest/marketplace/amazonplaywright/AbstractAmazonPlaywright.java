@@ -4,6 +4,8 @@ import ai.tracer.harvest.api.MarketplaceDetection;
 import ai.tracer.harvest.api.MarketplaceHarvester;
 import ai.tracer.harvest.marketplace.MarketplaceDetectionItem;
 
+import ai.tracer.harvest.stopwatch.HarvesterAnalytics;
+import ai.tracer.harvest.stopwatch.Stopwatch;
 import ai.tracer.harvest.tracerclient.Requests;
 import ai.tracer.harvest.utils.Failures;
 import com.microsoft.playwright.*;
@@ -16,6 +18,12 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
     private final String baseUrl;
     private final String marketplace;
 
+    private HarvesterAnalytics harvesterAnalytics = new HarvesterAnalytics();
+
+    private Requests requests = new Requests();
+
+    private Stopwatch stopwatch = new Stopwatch();
+
     protected AbstractAmazonPlaywright(String baseUrl, String marketplace) {
         this.baseUrl = baseUrl;
         this.marketplace = marketplace;
@@ -24,9 +32,11 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
     @Override
     public List<MarketplaceDetection> parseTarget(String term, int numItems, Long customer_id) throws IOException {
         ArrayList<MarketplaceDetection> detections = new ArrayList<>();
-        Failures failures = new Failures();
-        Requests requests = new Requests();
+        stopwatch.start();
+        harvesterAnalytics.setHarvester(marketplace);
+        harvesterAnalytics.setBrandTrack(term);
         try {
+
             Playwright playwright = Playwright.create();
             List<String> launchArgs = new ArrayList<>();
             launchArgs.add("--disable-dev-shm-usage");
@@ -38,7 +48,7 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
                 page.navigate(baseURL);
             }
             catch (Exception e){
-                failures.addNumberOfConnectionFailure();
+                harvesterAnalytics.addConnectionFailure();
             }
             System.out.println(page.title());
 
@@ -64,7 +74,7 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
 
             listUrl = extractUrls(urls, numItems);
 
-            listInfo = extractInfo(listUrl, page, numItems, failures);
+            listInfo = extractInfo(listUrl, page, numItems);
 
             listTitles = listInfo.get(0);
             listPrices = listInfo.get(1);
@@ -86,9 +96,10 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
         } catch (Exception e) {
             System.out.println("Playwright Exception");
         }
-        requests.postFailures(failures);
-        System.out.println("Connection Failures captured: " + failures.getNumberOfConnectionFailure());
-        System.out.println("Path Failures captured: " + failures.getNumberOfPathFailure());
+        harvesterAnalytics.setTime(stopwatch.getElapsedTime());
+        requests.postHarvesterMetrics(harvesterAnalytics);
+        System.out.println("Connection Failures captured: " + harvesterAnalytics.getConnectionFailure());
+        System.out.println("Path Failures captured: " + harvesterAnalytics.getPathFailure());
 
         return detections;
     }
@@ -125,7 +136,7 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
         return sponsoredList;
     }
 
-    public ArrayList<ArrayList<String>> extractInfo(ArrayList<String> url, Page page, int numItems, Failures failures) {
+    public ArrayList<ArrayList<String>> extractInfo(ArrayList<String> url, Page page, int numItems) {
         ArrayList<ArrayList<String>> infoList = new ArrayList<>();
         ArrayList<String> descriptionList = new ArrayList<>();
         ArrayList<String> titleList = new ArrayList<>();
@@ -138,10 +149,10 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
                 case "https://www.amazon.es":
                     for (int i = 0; i < numItems; i++) {
                         try{
-                        page.navigate(url.get(i));
+                            page.navigate(url.get(i));
                         }
                         catch (Exception e){
-                            failures.addNumberOfConnectionFailure();
+                            harvesterAnalytics.addConnectionFailure();
                         }
                         System.out.println(url.get(i));
                         titleList.add(titlePath.first().textContent());
@@ -149,7 +160,7 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
                             priceList.add(pricePath.first().textContent());
                         }
                         catch (Exception e){
-                            failures.addNumberOfPathFailure();
+                            harvesterAnalytics.addPathFailure();
                             System.out.println("Price Path not found");
                             priceList.add("0");
                         }
@@ -163,7 +174,7 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
                             page.navigate(url.get(i));
                         }
                         catch(Exception e){
-                            failures.addNumberOfConnectionFailure();
+                            harvesterAnalytics.addConnectionFailure();
                         }
                         System.out.println(url.get(i));
                         titleList.add(titlePath.first().textContent());
@@ -171,7 +182,7 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
                             priceList.add(pricePath.first().textContent());
                         }
                         catch (Exception e){
-                            failures.addNumberOfPathFailure();
+                            harvesterAnalytics.addPathFailure();
                             System.out.println("Price Path not found");
                             priceList.add("0");
                         }
@@ -191,7 +202,7 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
 
     public List<MarketplaceDetection> parseTargetPlayTest(String htmlFile, int numItems, Long customer_id) {
         ArrayList<MarketplaceDetection> detections = new ArrayList<>();
-        Failures failures = new Failures();
+        HarvesterAnalytics harvesterAnalytics = new HarvesterAnalytics();
         try {
             Playwright playwright = Playwright.create();
             List<String> launchArgs = new ArrayList<>();
@@ -228,7 +239,7 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
 
             listUrl = extractUrls(urls, numItems);
 
-            listInfo = extractInfo(listUrl, page, numItems, failures);
+            listInfo = extractInfo(listUrl, page, numItems);
 
             listTitles = listInfo.get(0);
             listPrices = listInfo.get(1);

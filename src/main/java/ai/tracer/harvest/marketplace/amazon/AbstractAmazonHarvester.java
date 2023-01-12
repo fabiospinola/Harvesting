@@ -3,6 +3,9 @@ package ai.tracer.harvest.marketplace.amazon;
 import ai.tracer.harvest.api.HarvestException;
 import ai.tracer.harvest.api.MarketplaceDetection;
 import ai.tracer.harvest.marketplace.MarketplaceDetectionItem;
+import ai.tracer.harvest.stopwatch.HarvesterAnalytics;
+import ai.tracer.harvest.stopwatch.Stopwatch;
+import ai.tracer.harvest.tracerclient.Requests;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,6 +23,11 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
 
     private final String userAgent = "appdetex";
 
+    private HarvesterAnalytics harvesterAnalytics = new HarvesterAnalytics();
+
+    private Requests requests = new Requests();
+
+    private Stopwatch stopwatch = new Stopwatch();
 
     public AbstractAmazonHarvester(String baseUrl) {
 
@@ -29,12 +37,21 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
     protected List<MarketplaceDetection> parseTarget(Document doc, int numItems, Long customer_id) throws Exception {
         int pageOrder = 0;
         boolean isGalleryView = false;
+        stopwatch.start();
         ArrayList<MarketplaceDetection> detections = new ArrayList<>();
-        String marketplace = doc.title();
         String listingURL = null;
         String domain = doc.getElementsByClass("nav-logo-locale").text();
+        String marketPlaceTitle = doc.title();
+        String brandTrack = marketPlaceTitle.substring(marketPlaceTitle.indexOf(":") + 1);
+        String harvester = marketPlaceTitle.substring(0,marketPlaceTitle.indexOf(":"));
+
+        brandTrack.trim();
+        harvester.trim();
+        harvesterAnalytics.setHarvester(harvester);
+        harvesterAnalytics.setBrandTrack(brandTrack);
         Elements listing = doc.getElementsByClass("s-card-container s-overflow-hidden aok-relative puis-include-content-margin puis s-latency-cf-section s-card-border");
         String listingTitle;
+        String listingPrice = null;
 
         //when the page is in gallery view the class names are different
         if(listing.size() == 0){
@@ -56,8 +73,11 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
             else{
                 listingTitle = ("\"" + listing.get(i).getElementsByClass("a-size-medium a-color-base a-text-normal").text() + "\"");
             }
-
-            String listingPrice = (listing.get(i).getElementsByClass("a-price-whole").text() + listing.get(i).getElementsByClass("a-price-fraction").text() + listing.get(i).getElementsByClass("a-price-symbol").text());
+            try {
+                listingPrice = (listing.get(i).getElementsByClass("a-price-whole").text() + listing.get(i).getElementsByClass("a-price-fraction").text() + listing.get(i).getElementsByClass("a-price-symbol").text());
+            } catch(Exception e){
+                harvesterAnalytics.addPathFailure();
+            }
             //String listingPrice = (listing.get(i).getElementsByClass("a-offscreen").text());
             String imageUrl = listing.get(i).getElementsByClass("s-image").attr("src");
 
@@ -97,6 +117,9 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
                     "Default",
                     1L));
         }
+        stopwatch.stop();
+        harvesterAnalytics.setTime(stopwatch.getElapsedTime());
+        requests.postHarvesterMetrics(harvesterAnalytics);
         return detections;
     }
 
