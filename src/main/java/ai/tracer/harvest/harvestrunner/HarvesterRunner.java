@@ -26,7 +26,9 @@ public class HarvesterRunner {
         AmazonUkHarvester harvestAUK = new AmazonUkHarvester();
         EbayUsHarvester harvestEUS = new EbayUsHarvester();
         EbayUkHarvester harvestEUK = new EbayUkHarvester();
+
         Requests request = new Requests();
+
         List<MarketplaceDetection> detectionsAES; //List to save amazon.es detections
         List<MarketplaceDetection> detectionsANL; //List to save amazon.nl detections
         List<MarketplaceDetection> detectionsAUS; //List to save amazon.com detections

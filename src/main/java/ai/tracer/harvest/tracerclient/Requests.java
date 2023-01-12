@@ -68,29 +68,9 @@ public class Requests {
         response.close();
     }
 
-    public void postFailures(Failures failures) throws IOException {
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpPost request = new HttpPost("http://localhost:8080/api/failure");
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        String failureResponse = mapper.writeValueAsString(failures);
-        System.out.println(failureResponse);
-        StringEntity json = new StringEntity(failureResponse, ContentType.APPLICATION_JSON);
-        request.setEntity(json);
-        CloseableHttpResponse response = httpClient.execute(request);
-
-        if (response.getStatusLine().getStatusCode() != 200 && response.getStatusLine().getStatusCode() != 201) {
-            System.out.println("No failures posted! " + response.getStatusLine().getStatusCode());
-        } else if (response.getStatusLine().getStatusCode() == 200 || response.getStatusLine().getStatusCode() == 201) {
-            System.out.println("New failures posted!");
-        }
-        response.close();
-    }
-
-
     public ArrayList<String> getBrandTracks() throws Exception {
         ArrayList<String> brandTracksArrayList = new ArrayList<>();
+
         JSONArray obj;
         CloseableHttpClient httpClient = HttpClients.createDefault();
         final HttpGet httpGet = new HttpGet("http://localhost:8080/api/brand-tracks");
