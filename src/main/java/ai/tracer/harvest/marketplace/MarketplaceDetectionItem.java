@@ -15,9 +15,8 @@ public class MarketplaceDetectionItem implements MarketplaceDetection {
     private String status;
     private String reasonCode;
     private Long analystId;
-    private Long customerId;
 
-    public MarketplaceDetectionItem(String title, String description, String url, String imageUrl, Integer order, String sponsored, String price, String state, String status, String reasonCode, Long analystId, Long customerId) {
+    public MarketplaceDetectionItem(String title, String description, String url, String imageUrl, Integer order, String sponsored, String price, String state, String status, String reasonCode, Long analystId) {
         this.title = title;
         this.description = description;
         this.url = url;
@@ -29,7 +28,6 @@ public class MarketplaceDetectionItem implements MarketplaceDetection {
         this.status = status;
         this.reasonCode = reasonCode;
         this.analystId = analystId;
-        this.customerId = customerId;
     }
 
     @Override
@@ -71,18 +69,13 @@ public class MarketplaceDetectionItem implements MarketplaceDetection {
         return state;
     }
     @Override
-    public String getStatus() {
-        return status;
-    }
+    public String getStatus() {return status;}
     @Override
     public String getReasonCode() {
         return reasonCode;
     }
     @Override
-    public Long getAnalystId(){return analystId;
-    }
-    @Override
-    public Long getCustomerId(){return customerId;}
+    public Long getAnalystId(){return analystId;}
 
     @Override
     public String setState(String state) {
@@ -107,11 +100,4 @@ public class MarketplaceDetectionItem implements MarketplaceDetection {
         this.analystId = analystId;
         return this.analystId;
     }
-
-    @Override
-    public Long setCustomerId(Long customerId) {
-        this.customerId = customerId;
-        return this.customerId;
-    }
-
 }

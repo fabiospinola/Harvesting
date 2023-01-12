@@ -3,6 +3,9 @@ package ai.tracer.harvest.marketplace.amazon;
 import ai.tracer.harvest.api.HarvestException;
 import ai.tracer.harvest.api.MarketplaceDetection;
 import ai.tracer.harvest.marketplace.MarketplaceDetectionItem;
+import ai.tracer.harvest.stopwatch.HarvesterAnalytics;
+import ai.tracer.harvest.stopwatch.Stopwatch;
+import ai.tracer.harvest.tracerclient.Requests;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,8 +21,13 @@ import java.util.List;
 
 public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
 
-    private String userAgent = "appdetex";
+    private final String userAgent = "appdetex";
 
+    private HarvesterAnalytics harvesterAnalytics = new HarvesterAnalytics();
+
+    private Requests requests = new Requests();
+
+    private Stopwatch stopwatch = new Stopwatch();
 
     public AbstractAmazonHarvester(String baseUrl) {
 
@@ -28,23 +36,49 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
     @Override
     protected List<MarketplaceDetection> parseTarget(Document doc, int numItems, Long customer_id) throws Exception {
         int pageOrder = 0;
-
+        boolean isGalleryView = false;
+        stopwatch.start();
         ArrayList<MarketplaceDetection> detections = new ArrayList<>();
-        String marketplace = doc.title();
         String listingURL = null;
         String domain = doc.getElementsByClass("nav-logo-locale").text();
-        Elements listing = doc.getElementsByClass("s-card-container s-overflow-hidden aok-relative puis-include-content-margin puis s-latency-cf-section s-card-border");
+        String marketPlaceTitle = doc.title();
+        String brandTrack = marketPlaceTitle.substring(marketPlaceTitle.indexOf(":") + 1);
+        String harvester = marketPlaceTitle.substring(0,marketPlaceTitle.indexOf(":"));
 
+        brandTrack.trim();
+        harvester.trim();
+        harvesterAnalytics.setHarvester(harvester);
+        harvesterAnalytics.setBrandTrack(brandTrack);
+        Elements listing = doc.getElementsByClass("s-card-container s-overflow-hidden aok-relative puis-include-content-margin puis s-latency-cf-section s-card-border");
+        String listingTitle;
+        String listingPrice = null;
+
+        //when the page is in gallery view the class names are different
+        if(listing.size() == 0){
+            listing = doc.getElementsByClass("s-card-container s-overflow-hidden aok-relative puis-expand-height puis-include-content-margin puis s-latency-cf-section s-card-border");
+            isGalleryView = true;
+        }
+        if(listing.size() < numItems){ //in case the number of listings is less than the number of items wanted
+            numItems = listing.size();
+        }
         for (int i = 0; i < numItems; i++) {
 
             pageOrder ++;
 
             String isPaidSearch = isPaidSearch(listing.get(i));
 
-            String listingTitle = ("\"" + listing.get(i).getElementsByClass("a-size-medium a-color-base a-text-normal").text() + "\"");
-
-            String listingPrice = (listing.get(i).getElementsByClass("a-price-whole").text() + listing.get(i).getElementsByClass("a-price-fraction").text());
-
+            if(isGalleryView) {
+                listingTitle = ("\"" + listing.get(i).getElementsByClass("a-size-base-plus a-color-base a-text-normal").text() + "\"");
+            }
+            else{
+                listingTitle = ("\"" + listing.get(i).getElementsByClass("a-size-medium a-color-base a-text-normal").text() + "\"");
+            }
+            try {
+                listingPrice = (listing.get(i).getElementsByClass("a-price-whole").text() + listing.get(i).getElementsByClass("a-price-fraction").text() + listing.get(i).getElementsByClass("a-price-symbol").text());
+            } catch(Exception e){
+                harvesterAnalytics.addPathFailure();
+            }
+            //String listingPrice = (listing.get(i).getElementsByClass("a-offscreen").text());
             String imageUrl = listing.get(i).getElementsByClass("s-image").attr("src");
 
             if (domain.equals(".us")) {
@@ -62,7 +96,7 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
             System.out.println("#" + pageOrder + " - " + listingTitle + " - " + listingURL);
             System.out.println("\t\t" + imageUrl);
             System.out.println("\t\tSponsored: " + isPaidSearch);
-            System.out.println("\t\tPrice: " + listingPrice + "$");
+            System.out.println("\t\tPrice: " + listingPrice);
             System.out.println("\t\tDescription: " + description);
             System.out.println("\t\tState: " + detectionState);
             System.out.println("\t\tStatus: " + detectionStatus);
@@ -81,9 +115,11 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
                     "open",
                     "new",
                     "Default",
-                    1L,
-                    customer_id));
+                    1L));
         }
+        stopwatch.stop();
+        harvesterAnalytics.setTime(stopwatch.getElapsedTime());
+        requests.postHarvesterMetrics(harvesterAnalytics);
         return detections;
     }
 

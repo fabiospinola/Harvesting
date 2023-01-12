@@ -4,6 +4,9 @@ import ai.tracer.harvest.api.HarvestException;
 import ai.tracer.harvest.api.MarketplaceDetection;
 import ai.tracer.harvest.api.MarketplaceHarvester;
 import ai.tracer.harvest.marketplace.MarketplaceDetectionItem;
+import ai.tracer.harvest.stopwatch.HarvesterAnalytics;
+import ai.tracer.harvest.stopwatch.Stopwatch;
+import ai.tracer.harvest.tracerclient.Requests;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -23,6 +26,12 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
     EbayDynamicClass dynamic = new EbayDynamicClass();
     private String baseUrl;
 
+    private HarvesterAnalytics harvesterAnalytics = new HarvesterAnalytics();
+
+    private Requests requests = new Requests();
+
+    private Stopwatch stopwatch = new Stopwatch();
+
     public AbstractEbayHarvester(String baseUrl) {
         this.baseUrl = baseUrl;
     }
@@ -30,14 +39,17 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
     @Override
     public List<MarketplaceDetection> parseTarget(String term, int numItems,Long customer_id) throws HarvestException {
         WebClient client = getWebClient();
+        stopwatch.start();
+        harvesterAnalytics.setBrandTrack(term);
         try {
             String baseUrl = this.baseUrl + URLEncoder.encode(term, StandardCharsets.UTF_8);
-
+            //String baseUrl = this.baseUrl + term;
             HtmlPage page = client.getPage(baseUrl);
             return parseTargetInternalHtmlUnit(page, numItems, customer_id);
         } catch (IOException e) {
+            harvesterAnalytics.addConnectionFailure();
             e.printStackTrace();
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -51,7 +63,7 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
         for (HtmlElement src : items) {
             parseSponsoredClassNameFromListing(src, sponsoredClassNames);
         }
-        System.out.println("HASMAP: " + sponsoredClassNames);
+        //System.out.println("HASMAP: " + sponsoredClassNames);
 
         String sponsoredClassName = dynamic.countingClassTimes(sponsoredClassNames);
         int index = 0;
@@ -59,6 +71,9 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
             if (index == numItems) break;
             detections.add(createDetectionHtmlUnit(src, ++index, sponsoredClassName, customer_id));
         }
+        harvesterAnalytics.setTime(stopwatch.getElapsedTime());
+        harvesterAnalytics.setHarvester(baseUrl);
+        requests.postHarvesterMetrics(harvesterAnalytics);
         return detections;
     }
 
@@ -90,8 +105,8 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
         String url = anchorUrl == null ? "No item url available for item" : anchorUrl.getHrefAttribute();
 
         HtmlPage itemPage = client.getPage(url);
-        HtmlElement spanDescription = itemPage.getFirstByXPath(".//div[@class='vim d-item-description']/iframe");
-        String description = spanDescription == null ? "No description available for item for item" : ("\"" + spanDescription.asNormalizedText() + "\"");
+        HtmlElement spanDescription = itemPage.getFirstByXPath(".//div[@class='vim d-item-description']/iframe"); //
+        String description = spanDescription == null ? "No description available for this item" : ("\"" + spanDescription.asNormalizedText() + "\"");
 
         HtmlElement spanSponsored = src.getFirstByXPath(".//div[@class='s-item__details clearfix']//div[@class='s-item__detail s-item__detail--primary'][last()]//span//span");
 
@@ -100,13 +115,24 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
 
         String paid = Objects.equals(sponsor, sponsoredClassName) ? "true" : "false";
 
-        return new MarketplaceDetectionItem(title, description, url, imageUrl, index, paid, price,"open","new","Default",1L, customer_id);
+        System.out.println("#" + index);
+        System.out.println("Title:" + title);
+        System.out.println("Price:" + price);
+        System.out.println("Sponsored: " + paid);
+        System.out.println("Description: " + description);
+        System.out.println("URL: " + url);
+        System.out.println("ImageURl: " + imageUrl);
+
+        return new MarketplaceDetectionItem(title, description, url, imageUrl, index, paid, price,"open","new","Default",1L);
     }
 
     private static WebClient getWebClient() {
         WebClient client = new WebClient();
         client.getOptions().setCssEnabled(false);
         client.getOptions().setJavaScriptEnabled(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnScriptError(false);
+        client.getOptions().setPrintContentOnFailingStatusCode(false);
         return client;
     }
 }
