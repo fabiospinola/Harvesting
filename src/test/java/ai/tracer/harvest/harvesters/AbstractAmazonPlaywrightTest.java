@@ -1,7 +1,7 @@
-package ai.tracer.harvest.marketplace;
+package ai.tracer.harvest.harvesters;
 
 import ai.tracer.harvest.api.MarketplaceDetection;
-import ai.tracer.harvest.marketplace.amazonplaywright.AbstractAmazonPlaywright;
+import ai.tracer.harvest.harvesters.amazonplaywright.AbstractAmazonPlaywright;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

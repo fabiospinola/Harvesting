@@ -1,4 +1,4 @@
-package ai.tracer.harvest.marketplace;
+package ai.tracer.harvest.harvesters;
 
 import ai.tracer.harvest.api.MarketplaceDetection;
 

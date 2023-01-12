@@ -1,13 +1,12 @@
-package ai.tracer.harvest.marketplace.amazonplaywright;
+package ai.tracer.harvest.harvesters.amazonplaywright;
 
 import ai.tracer.harvest.api.MarketplaceDetection;
 import ai.tracer.harvest.api.MarketplaceHarvester;
-import ai.tracer.harvest.marketplace.MarketplaceDetectionItem;
+import ai.tracer.harvest.harvesters.MarketplaceDetectionItem;
 
 import ai.tracer.harvest.stopwatch.HarvesterAnalytics;
 import ai.tracer.harvest.stopwatch.Stopwatch;
 import ai.tracer.harvest.tracerclient.Requests;
-import ai.tracer.harvest.utils.Failures;
 import com.microsoft.playwright.*;
 
 import java.io.IOException;

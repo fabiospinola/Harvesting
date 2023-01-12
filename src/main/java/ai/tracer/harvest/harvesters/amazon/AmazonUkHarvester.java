@@ -1,4 +1,4 @@
-package ai.tracer.harvest.marketplace.amazon;
+package ai.tracer.harvest.harvesters.amazon;
 
 public class AmazonUkHarvester extends AbstractAmazonHarvester{
 

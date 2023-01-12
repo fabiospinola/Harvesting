@@ -1,4 +1,4 @@
-package ai.tracer.harvest.marketplace.amazonplaywright;
+package ai.tracer.harvest.harvesters.amazonplaywright;
 
 import ai.tracer.harvest.api.MarketplaceDetection;
 

@@ -1,6 +1,6 @@
-package ai.tracer.harvest.marketplace;
+package ai.tracer.harvest.harvesters;
 
-import ai.tracer.harvest.marketplace.amazon.AmazonUsHarvester;
+import ai.tracer.harvest.harvesters.amazon.AmazonUsHarvester;
 
 public class AmazonUsHarvesterTest extends AbstractAmazonHarvesterTest {
 

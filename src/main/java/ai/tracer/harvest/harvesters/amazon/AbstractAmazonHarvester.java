@@ -1,8 +1,8 @@
-package ai.tracer.harvest.marketplace.amazon;
+package ai.tracer.harvest.harvesters.amazon;
 
 import ai.tracer.harvest.api.HarvestException;
 import ai.tracer.harvest.api.MarketplaceDetection;
-import ai.tracer.harvest.marketplace.MarketplaceDetectionItem;
+import ai.tracer.harvest.harvesters.MarketplaceDetectionItem;
 import ai.tracer.harvest.stopwatch.HarvesterAnalytics;
 import ai.tracer.harvest.stopwatch.Stopwatch;
 import ai.tracer.harvest.tracerclient.Requests;

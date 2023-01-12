@@ -1,8 +1,8 @@
-package ai.tracer.harvest.marketplace;
+package ai.tracer.harvest.harvesters;
 
 import ai.tracer.harvest.api.HarvestException;
 import ai.tracer.harvest.api.MarketplaceDetection;
-import ai.tracer.harvest.marketplace.amazon.AbstractAmazonHarvester;
+import ai.tracer.harvest.harvesters.amazon.AbstractAmazonHarvester;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.Assertions;

@@ -1,13 +1,13 @@
 package ai.tracer.harvest.harvestrunner;
 
 import ai.tracer.harvest.tracerclient.Requests;
-import ai.tracer.harvest.marketplace.amazonplaywright.AmazonEsHarvester;
-import ai.tracer.harvest.marketplace.amazonplaywright.AmazonNlHarvester;
+import ai.tracer.harvest.harvesters.amazonplaywright.AmazonEsHarvester;
+import ai.tracer.harvest.harvesters.amazonplaywright.AmazonNlHarvester;
 import ai.tracer.harvest.api.MarketplaceDetection;
-import ai.tracer.harvest.marketplace.amazon.AmazonUkHarvester;
-import ai.tracer.harvest.marketplace.amazon.AmazonUsHarvester;
-import ai.tracer.harvest.marketplace.ebay.EbayUkHarvester;
-import ai.tracer.harvest.marketplace.ebay.EbayUsHarvester;
+import ai.tracer.harvest.harvesters.amazon.AmazonUkHarvester;
+import ai.tracer.harvest.harvesters.amazon.AmazonUsHarvester;
+import ai.tracer.harvest.harvesters.ebay.EbayUkHarvester;
+import ai.tracer.harvest.harvesters.ebay.EbayUsHarvester;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -22,8 +22,10 @@ public class HarvesterRunner {
 
         AmazonEsHarvester harvestAES = new AmazonEsHarvester();
         AmazonNlHarvester harvestANL = new AmazonNlHarvester();
+
         AmazonUsHarvester harvestAUS = new AmazonUsHarvester();
         AmazonUkHarvester harvestAUK = new AmazonUkHarvester();
+
         EbayUsHarvester harvestEUS = new EbayUsHarvester();
         EbayUkHarvester harvestEUK = new EbayUkHarvester();
 
@@ -31,8 +33,10 @@ public class HarvesterRunner {
 
         List<MarketplaceDetection> detectionsAES; //List to save amazon.es detections
         List<MarketplaceDetection> detectionsANL; //List to save amazon.nl detections
+
         List<MarketplaceDetection> detectionsAUS; //List to save amazon.com detections
         List<MarketplaceDetection> detectionsAUK; //List to save amazon.co.uk detections
+
         List<MarketplaceDetection> detectionsEUS; //List to save ebay.com detections
         List<MarketplaceDetection> detectionsEUK; //List to save ebay.co.uk detections
 
@@ -44,27 +48,21 @@ public class HarvesterRunner {
             try {
 
                 detectionsAES = harvestAES.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
-
-                detectionsANL = harvestANL.parseTarget(brandTracks.get(i), numItems, customerIds.get(i));
-
-                detectionsAUS = harvestAUS.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
-
-                detectionsAUK = harvestAUK.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
-
-                detectionsEUS = harvestEUS.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
-
-                detectionsEUK = harvestEUK.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
-
                 request.postADetection(detectionsAES,customerIds.get(i));
 
+                detectionsANL = harvestANL.parseTarget(brandTracks.get(i), numItems, customerIds.get(i));
                 request.postADetection(detectionsANL,customerIds.get(i));
 
+                detectionsAUS = harvestAUS.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
                 request.postADetection(detectionsAUS,customerIds.get(i));
 
+                detectionsAUK = harvestAUK.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
                 request.postADetection(detectionsAUK,customerIds.get(i));
 
+                detectionsEUS = harvestEUS.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
                 request.postADetection(detectionsEUS,customerIds.get(i));
 
+                detectionsEUK = harvestEUK.parseTarget(brandTracks.get(i), numItems,customerIds.get(i));
                 request.postADetection(detectionsEUK,customerIds.get(i));
 
             } catch (Exception e) {
