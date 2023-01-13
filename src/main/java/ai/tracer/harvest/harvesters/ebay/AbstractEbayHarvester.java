@@ -77,6 +77,25 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
         return detections;
     }
 
+    public List<MarketplaceDetection> parseTargetInternalHtmlUnitTest(HtmlPage page, int numItems,Long customer_id) throws Exception {
+        ArrayList<MarketplaceDetection> detections = new ArrayList<>();
+        List<HtmlElement> items = getElementsHtmlUnit(page);
+        HashMap<String, Integer> sponsoredClassNames = new HashMap<>();
+
+        for (HtmlElement src : items) {
+            parseSponsoredClassNameFromListing(src, sponsoredClassNames);
+        }
+        //System.out.println("HASMAP: " + sponsoredClassNames);
+
+        String sponsoredClassName = dynamic.countingClassTimes(sponsoredClassNames);
+        int index = 0;
+        for (HtmlElement src : items) {
+            if (index == numItems) break;
+            detections.add(createDetectionHtmlUnit(src, ++index, sponsoredClassName, customer_id));
+        }
+        return detections;
+    }
+
     protected List<HtmlElement> getElementsHtmlUnit(HtmlPage page) {
         return page.getByXPath("//ul[@class='srp-results srp-list clearfix']//li[contains(@class, 's-item s-item__pl-on-bottom')]//div[@class='s-item__wrapper clearfix']");
     }

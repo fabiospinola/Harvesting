@@ -123,6 +123,94 @@ public abstract class AbstractAmazonHarvester extends AbstractHarvesterJsoup {
         return detections;
     }
 
+    public List<MarketplaceDetection> parseTargetTestTesting(Document doc, int numItems, Long customer_id) {
+        int pageOrder = 0;
+        boolean isGalleryView = false;
+        ArrayList<MarketplaceDetection> detections = new ArrayList<>();
+        String listingURL = null;
+        String domain = doc.getElementsByClass("nav-logo-locale").text();
+        String marketPlaceTitle = doc.title();
+        String brandTrack = marketPlaceTitle.substring(marketPlaceTitle.indexOf(":") + 1);
+        String harvester = marketPlaceTitle.substring(0,marketPlaceTitle.indexOf(":"));
+
+        brandTrack.trim();
+        harvester.trim();
+        Elements listing = doc.getElementsByClass("s-card-container s-overflow-hidden aok-relative puis-include-content-margin puis s-latency-cf-section s-card-border");
+        String listingTitle;
+        String listingPrice = null;
+
+        //when the page is in gallery view the class names are different
+        if(listing.size() == 0){
+            listing = doc.getElementsByClass("s-card-container s-overflow-hidden aok-relative puis-expand-height puis-include-content-margin puis s-latency-cf-section s-card-border");
+            isGalleryView = true;
+        }
+        if(listing.size() < numItems){ //in case the number of listings is less than the number of items wanted
+            numItems = listing.size();
+        }
+        for (int i = 0; i < numItems; i++) {
+
+            pageOrder ++;
+
+            String isPaidSearch = isPaidSearch(listing.get(i));
+
+            if(isGalleryView) {
+                listingTitle = ("\"" + listing.get(i).getElementsByClass("a-size-base-plus a-color-base a-text-normal").text() + "\"");
+            }
+            else{
+                listingTitle = ("\"" + listing.get(i).getElementsByClass("a-size-medium a-color-base a-text-normal").text() + "\"");
+            }
+            try {
+                listingPrice = (listing.get(i).getElementsByClass("a-price-whole").text() + listing.get(i).getElementsByClass("a-price-fraction").text() + listing.get(i).getElementsByClass("a-price-symbol").text());
+            } catch(Exception e){
+
+            }
+            //String listingPrice = (listing.get(i).getElementsByClass("a-offscreen").text());
+            String imageUrl = listing.get(i).getElementsByClass("s-image").attr("src");
+
+            if (domain.equals(".us")) {
+                listingURL = ("https://www.amazon.com" + listing.get(i).getElementsByClass("a-link-normal s-no-outline").attr("href"));
+            }
+            else {
+                listingURL = ("https://www.amazon" + domain + listing.get(i).getElementsByClass("a-link-normal s-no-outline").attr("href"));
+            }
+            String description = null;
+            try {
+                description = getDescription(listingURL, userAgent);
+            } catch (HarvestException e) {
+                throw new RuntimeException(e);
+            }
+            String detectionState = "new";
+            String detectionStatus = "open";
+            String detectionReason = "Default";
+            String detectionAnalyst = "Harvester";
+
+            System.out.println("#" + pageOrder + " - " + listingTitle + " - " + listingURL);
+            System.out.println("\t\t" + imageUrl);
+            System.out.println("\t\tSponsored: " + isPaidSearch);
+            System.out.println("\t\tPrice: " + listingPrice);
+            System.out.println("\t\tDescription: " + description);
+            System.out.println("\t\tState: " + detectionState);
+            System.out.println("\t\tStatus: " + detectionStatus);
+            System.out.println("\t\tReason: " + detectionReason);
+            System.out.println("\t\tAnalyst: " + detectionAnalyst);
+            System.out.println();
+            System.out.println("\n");
+
+            detections.add(new MarketplaceDetectionItem(listingTitle,
+                    description,
+                    listingURL,
+                    imageUrl,
+                    pageOrder,
+                    isPaidSearch,
+                    listingPrice,
+                    "open",
+                    "new",
+                    "Default",
+                    1L));
+        }
+        return detections;
+    }
+
     public void harvest(String searchTerm) throws IOException {
 
         String url = getSearchUrl(searchTerm);

@@ -41,13 +41,15 @@ public abstract class AbstractHarvesterJsoup implements MarketplaceHarvester {
     public List<MarketplaceDetection> parseTargetTest(String searchTerm, int numItems,Long customer_id) throws Exception {
         int pageOrder = 0;
 
-        this.baseurl = baseurl + searchTerm;
+        //this.baseurl = baseurl + searchTerm;
 
         Document doc = Jsoup.parse(searchTerm);
         System.out.printf("Title: %s\n\n\n\n", doc.title());
-        return parseTarget(doc, numItems,customer_id);
+        return parseTargetTestTesting(doc, numItems,customer_id);
 
     }
+
+    protected abstract List<MarketplaceDetection> parseTargetTestTesting(Document doc, int numItems, Long customer_id);
 
     protected abstract List<MarketplaceDetection> parseTarget(Document doc, int numItems, Long customer_id) throws Exception;
 }
