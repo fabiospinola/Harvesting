@@ -6,7 +6,7 @@ import ai.tracer.harvest.api.MarketplaceHarvester;
 import ai.tracer.harvest.harvesters.MarketplaceDetectionItem;
 import ai.tracer.harvest.stopwatch.HarvesterAnalytics;
 import ai.tracer.harvest.stopwatch.Stopwatch;
-import ai.tracer.harvest.tracerclient.Requests;
+import ai.tracer.harvest.tracerclient.TracerClient;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -28,7 +28,7 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
 
     private HarvesterAnalytics harvesterAnalytics = new HarvesterAnalytics();
 
-    private Requests requests = new Requests();
+    private TracerClient tracerClient = new TracerClient();
 
     private Stopwatch stopwatch = new Stopwatch();
 
@@ -73,7 +73,7 @@ public abstract class AbstractEbayHarvester implements MarketplaceHarvester {
         }
         harvesterAnalytics.setTime(stopwatch.getElapsedTime());
         harvesterAnalytics.setHarvester(baseUrl);
-        requests.postHarvesterMetrics(harvesterAnalytics);
+        tracerClient.postHarvesterMetrics(harvesterAnalytics);
         return detections;
     }
 

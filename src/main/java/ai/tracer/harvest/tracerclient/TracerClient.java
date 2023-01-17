@@ -2,7 +2,6 @@ package ai.tracer.harvest.tracerclient;
 
 import ai.tracer.harvest.api.MarketplaceDetection;
 import ai.tracer.harvest.stopwatch.HarvesterAnalytics;
-import ai.tracer.harvest.utils.Failures;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.ParseException;
 import org.apache.http.StatusLine;
@@ -20,9 +19,11 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Requests {
+public class TracerClient {
 
     public void postADetection(List<MarketplaceDetection> detectionList, Long customerId) throws Exception {
 
@@ -68,9 +69,9 @@ public class Requests {
         response.close();
     }
 
-    public ArrayList<String> getBrandTracks() throws Exception {
+    public Map<String,Long> fetchBrandTracks() throws Exception {
         ArrayList<String> brandTracksArrayList = new ArrayList<>();
-
+        Map<String,Long> myMap = new HashMap<>();
         JSONArray obj;
         CloseableHttpClient httpClient = HttpClients.createDefault();
         final HttpGet httpGet = new HttpGet("http://localhost:8080/api/brand-tracks");
@@ -93,14 +94,15 @@ public class Requests {
                 throw new RuntimeException(e);
             }
             for(int i = 0; i < obj.length(); i++){
-                System.out.println("# "+ i + " " + obj.getJSONObject(i).getString("term"));
-                brandTracksArrayList.add(obj.getJSONObject(i).getString("term"));
+                //System.out.println("# "+ i + " " + obj.getJSONObject(i).getString("term"));
+                myMap.put(obj.getJSONObject(i).getString("term"),Long.valueOf(obj.getJSONObject(i).getJSONObject("customer").getString("id")));
+                System.out.println(myMap);
             }
         }
         response.close();
-        return brandTracksArrayList;
+        return myMap;
     }
-    public ArrayList<Long> getCustomerIds() throws Exception {
+    public ArrayList<Long> fetchCustomerIds() throws Exception {
         ArrayList<Long> customerIds = new ArrayList<>();
         JSONArray obj;
         CloseableHttpClient httpClient = HttpClients.createDefault();

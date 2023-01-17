@@ -2,6 +2,10 @@ package ai.tracer.harvest.tracerclient;
 
 import ai.tracer.harvest.api.MarketplaceDetection;
 
+
+/**
+ * this
+ */
 public class DetectionJSONCreator {
 
     private final MarketplaceDetection detection;

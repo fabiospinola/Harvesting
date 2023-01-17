@@ -6,9 +6,10 @@ import ai.tracer.harvest.harvesters.MarketplaceDetectionItem;
 
 import ai.tracer.harvest.stopwatch.HarvesterAnalytics;
 import ai.tracer.harvest.stopwatch.Stopwatch;
-import ai.tracer.harvest.tracerclient.Requests;
+import ai.tracer.harvest.tracerclient.TracerClient;
 import com.microsoft.playwright.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -19,7 +20,7 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
 
     private HarvesterAnalytics harvesterAnalytics = new HarvesterAnalytics();
 
-    private Requests requests = new Requests();
+    private TracerClient tracerClient = new TracerClient();
 
     private Stopwatch stopwatch = new Stopwatch();
 
@@ -96,7 +97,7 @@ public abstract class AbstractAmazonPlaywright implements MarketplaceHarvester {
             System.out.println("Playwright Exception");
         }
         harvesterAnalytics.setTime(stopwatch.getElapsedTime());
-        requests.postHarvesterMetrics(harvesterAnalytics);
+        tracerClient.postHarvesterMetrics(harvesterAnalytics);
         System.out.println("Connection Failures captured: " + harvesterAnalytics.getConnectionFailure());
         System.out.println("Path Failures captured: " + harvesterAnalytics.getPathFailure());
 

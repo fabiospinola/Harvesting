@@ -2,9 +2,9 @@ package ai.tracer.harvest.harvesters;
 
 import ai.tracer.harvest.harvesters.amazonplaywright.AmazonEsHarvester;
 
-public class AmazonEsHarvesterTest extends AbstractAmazonPlaywrightTest {
+public class AmazonEsHarvesterTest extends AbstractAmazonEuTest {
 
     public AmazonEsHarvesterTest(){
-        super(new AmazonEsHarvester(), "file:/Users/fabio.spinola/Documents/WebScraping/Harvesting/WebScraper/src/test/resources/amazonEsSearch.html","file:///Users/fabio.spinola/Documents/WebScraping/Harvesting/WebScraper/src/test/resources/amazonEsItem.html");
+        super(new AmazonEsHarvester(), "src/test/resources/amazonEsSearch.html","src/test/resources/amazonEsItem.html");
     }
 }
